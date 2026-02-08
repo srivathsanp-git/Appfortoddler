@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Fruits | PNG Edition</title>
+    <title>Toddler Fruits | Auto-Flow</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
@@ -33,33 +33,31 @@
         .main-card {
             background: white; width: 100%; max-width: 450px; border-radius: var(--radius);
             overflow: hidden; box-shadow: var(--card-shadow); flex: 1;
-            display: flex; flex-direction: column; margin-bottom: 100px;
+            display: flex; flex-direction: column; margin-bottom: 40px; /* Reduced margin since button is gone */
         }
 
-        .img-container { width: 100%; height: 65%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
-        .main-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.2s ease-in-out; }
-
-        .error-msg { position: absolute; color: #FF3B30; font-size: 0.9rem; text-align: center; padding: 15px; display: none; background: rgba(255,255,255,0.9); width: 100%; }
+        .img-container { width: 100%; height: 70%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
+        .main-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.3s; }
 
         .content { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .eng-txt { font-size: 3.5rem; font-weight: 900; margin: 0 0 10px 0; letter-spacing: -2px; text-transform: uppercase; }
         
         .play-bar {
-            background: var(--apple-blue); color: white; padding: 20px; border-radius: 24px;
+            background: var(--apple-blue); color: white; padding: 24px; border-radius: 24px;
             display: flex; align-items: center; justify-content: center; gap: 12px;
-            font-size: 1.4rem; font-weight: 800; cursor: pointer;
+            font-size: 1.6rem; font-weight: 800; cursor: pointer;
+            transition: transform 0.1s active;
         }
-
-        .next-btn {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--nike-black); color: white; padding: 22px;
-            border-radius: 50px; font-size: 1.4rem; font-weight: 900; width: 90%; max-width: 400px; border: none;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
+        .play-bar:active { transform: scale(0.98); }
 
         #celebration {
             display: none; position: fixed; inset: 0; background: white; z-index: 1000;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        
+        .reset-btn {
+            background: var(--nike-black); color: white; padding: 22px 50px;
+            border-radius: 50px; font-size: 1.4rem; font-weight: 900; border: none; margin-top: 30px;
         }
     </style>
 </head>
@@ -68,7 +66,7 @@
     <div id="app-screen" class="screen">
         <div class="progress-header">
             <div class="progress-meta">
-                <span>Fruits</span>
+                <span>Learning Fruits</span>
                 <span id="prog-label"></span>
             </div>
             <div class="progress-outer"><div id="prog-bar" class="progress-inner"></div></div>
@@ -76,31 +74,28 @@
 
         <div class="main-card">
             <div class="img-container">
-                <div id="img-err" class="error-msg">⚠️ Missing file in /fruits folder</div>
-                <img id="m-img" class="main-img" src="" onerror="showError()" onload="hideError()">
+                <img id="m-img" class="main-img" src="">
             </div>
             <div class="content">
                 <div id="m-eng" class="eng-txt"></div>
                 <div class="play-bar" onclick="speak()">
-                    <span>🔊</span> <span>SAY IT</span>
+                    <span id="v-icon">🔊</span> <span id="v-label">TAP TO HEAR</span>
                 </div>
             </div>
         </div>
-        <button id="action-btn" class="next-btn" onclick="next()">NEXT FRUIT</button>
+        <p style="color: #8E8E93; font-weight: 600;">Tap the blue button to continue</p>
     </div>
 
     <div id="celebration">
-        <span style="font-size: 6rem;">🍓</span>
-        <h1 style="font-size: 3rem; margin: 10px 0;">Great Job!</h1>
-        <p>You learned all the fruits!</p>
-        <button class="next-btn" style="position:static; margin-top: 20px;" onclick="location.reload()">START AGAIN</button>
+        <span style="font-size: 6rem;">✨</span>
+        <h1 style="font-size: 3rem; margin: 10px 0;">Awesome!</h1>
+        <p>You've seen all the fruits.</p>
+        <button class="reset-btn" onclick="location.reload()">PLAY AGAIN</button>
     </div>
 
     <script>
         const synth = window.speechSynthesis;
         const folder = "fruits/"; 
-        
-        // Updated to .png extensions
         const fruitItems = [
             "apple.png", "mango.png", "banana.png", "grapes.png", 
             "orange.png", "pineapple.png", "watermelon.png", 
@@ -108,15 +103,17 @@
         ];
 
         let idx = 0;
+        let isTransitioning = false;
 
         function update() {
+            isTransitioning = false;
             const fileName = fruitItems[idx];
-            // Remove .png for the text label
             const fruitName = fileName.replace('.png', ''); 
             
             const img = document.getElementById('m-img');
             img.style.opacity = 0;
             img.src = folder + fileName;
+            img.onload = () => img.style.opacity = 1;
             
             document.getElementById('m-eng').innerText = fruitName;
             
@@ -124,17 +121,31 @@
             document.getElementById('prog-bar').style.width = p + '%';
             document.getElementById('prog-label').innerText = `${idx + 1} / ${fruitItems.length}`;
             
-            if (idx === fruitItems.length - 1) {
-                document.getElementById('action-btn').innerText = "FINISH";
-            }
+            document.getElementById('v-icon').innerText = "🔊";
+            document.getElementById('v-label').innerText = "TAP TO HEAR";
         }
 
         function speak() {
-            if(synth.speaking) synth.cancel();
+            if(synth.speaking || isTransitioning) return;
+            
             const text = fruitItems[idx].replace('.png', '');
             const u = new SpeechSynthesisUtterance(text);
             u.lang = 'en-US';
             u.rate = 0.8;
+
+            u.onstart = () => {
+                document.getElementById('v-icon').innerText = "💬";
+                document.getElementById('v-label').innerText = "LISTENING...";
+            };
+
+            u.onend = () => {
+                isTransitioning = true;
+                // Wait 1 second after speaking, then go to next
+                setTimeout(() => {
+                    next();
+                }, 1000);
+            };
+
             synth.speak(u);
         }
 
@@ -145,15 +156,6 @@
             } else {
                 document.getElementById('celebration').style.display = 'flex';
             }
-        }
-
-        function showError() { 
-            document.getElementById('img-err').style.display = 'block'; 
-            document.getElementById('img-err').innerText = `Missing: ${folder}${fruitItems[idx]}`;
-        }
-        function hideError() { 
-            document.getElementById('img-err').style.display = 'none'; 
-            document.getElementById('m-img').style.opacity = 1;
         }
 
         window.onload = update;
