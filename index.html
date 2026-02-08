@@ -21,9 +21,20 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            color: var(--text-color);
         }
 
-        /* Large Tap-Friendly Buttons */
+        /* Nav Links */
+        .home-link {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+            color: #d32f2f;
+        }
+
+        /* Large Buttons */
         .btn {
             padding: 20px 40px;
             font-size: 1.8rem;
@@ -34,19 +45,12 @@
             margin: 10px;
             font-weight: bold;
             box-shadow: 0 8px 0 #000;
+            transition: 0.1s;
         }
 
         .btn:active {
             transform: translateY(4px);
             box-shadow: 0 4px 0 #000;
-        }
-
-        .home-link {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            text-decoration: underline;
-            cursor: pointer;
-            color: #000;
         }
 
         .screen {
@@ -57,18 +61,19 @@
             width: 100%;
             height: 100%;
             text-align: center;
-            padding: 20px;
+            padding: 10px;
+            box-sizing: border-box;
         }
 
         .active { display: flex; }
 
-        /* Tamil Learning Elements */
+        /* Progress Bar */
         .progress-container {
             width: 80%;
             background-color: #fff;
             border: 3px solid #000;
             border-radius: 25px;
-            margin: 10px 0;
+            margin-bottom: 15px;
         }
 
         .progress-bar {
@@ -79,6 +84,7 @@
             transition: width 0.3s;
         }
 
+        /* Learning Card */
         .word-card {
             background: white;
             padding: 20px;
@@ -86,16 +92,19 @@
             border: 5px solid #000;
             width: 90%;
             max-width: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .word-img { width: 180px; height: 180px; object-fit: contain; }
+        .word-img { width: 180px; height: 180px; object-fit: contain; margin-bottom: 10px; }
         
         /* Green Horizontal Play Button */
         .play-btn-green {
             background-color: #4CAF50;
             color: white;
             font-size: 1.5rem;
-            width: 200px;
+            width: 250px;
             padding: 15px;
             border-radius: 50px;
             border: 4px solid #000;
@@ -104,6 +113,8 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .next-btn {
@@ -114,59 +125,65 @@
             color: white;
         }
 
-        #player { border: 5px solid #000; border-radius: 20px; }
+        .sloka-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        #player { border: 5px solid #000; border-radius: 20px; background: #000; }
     </style>
 </head>
 <body>
 
     <div id="home-screen" class="screen active">
-        <h1 style="font-size: 2.5rem;">Ready to Learn? 🎈</h1>
+        <h1 style="font-size: 2.5rem;">Vannakam! 🎈</h1>
         <button class="btn" style="background-color: var(--sloka-bg);" onclick="showScreen('sloka-screen')">Slokas 🕉️</button>
-        <button class="btn" style="background-color: var(--tamil-bg);" onclick="showScreen('tamil-category-screen')">Tamil 🍎</button>
+        <button class="btn" style="background-color: var(--tamil-bg);" onclick="showScreen('tamil-category-screen')">Learn Tamil 🍎</button>
     </div>
 
     <div id="sloka-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Go to Home Page</div>
+        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
         <h2>Pick a Sloka</h2>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="sloka-grid">
             <div onclick="playSloka('G8G8WwGX0Qc', 54)">
-                <img src="https://cdn-icons-png.flaticon.com/512/2334/2334465.png" width="100"><br>Ganesha
+                <img src="https://cdn-icons-png.flaticon.com/512/2334/2334465.png" width="120"><br><strong>Ganesha</strong>
             </div>
             <div onclick="playSloka('G8G8WwGX0Qc', 102)">
-                <img src="https://cdn-icons-png.flaticon.com/512/3362/3362153.png" width="100"><br>Saraswati
+                <img src="https://cdn-icons-png.flaticon.com/512/3362/3362153.png" width="120"><br><strong>Saraswati</strong>
             </div>
         </div>
     </div>
 
     <div id="sloka-player-screen" class="screen">
-        <div class="home-link" onclick="stopVideoAndHome()">🏠 Go to Home Page</div>
+        <div class="home-link" onclick="stopVideoAndHome()">🏠 Home</div>
         <div id="player"></div>
         <button class="btn" onclick="showScreen('sloka-screen')">Back to Slokas</button>
     </div>
 
     <div id="tamil-category-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Go to Home Page</div>
+        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
         <h2>Pick a Category</h2>
-        <select id="category-select" style="font-size: 1.5rem; padding: 10px; margin: 20px;">
+        <select id="category-select" style="font-size: 1.5rem; padding: 15px; border-radius: 15px; margin: 20px;">
             <option value="fruits">Fruits (பழங்கள்)</option>
             <option value="animals">Animals (விலங்குகள்)</option>
         </select>
-        <button class="btn" style="background-color: var(--tamil-bg);" onclick="startTamil()">Start!</button>
+        <button class="btn" style="background-color: var(--tamil-bg);" onclick="startTamil()">Go! ▶️</button>
     </div>
 
     <div id="tamil-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Go to Home Page</div>
+        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
         <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
         
         <div class="word-card">
             <img id="tamil-img" src="" class="word-img">
-            <h2 id="eng-word" style="color: blue; margin: 5px;"></h2>
+            <h2 id="eng-word" style="color: #1565C0; margin: 5px; font-size: 2rem;"></h2>
             
-            <button id="speech-btn" class="play-btn-green" onclick="toggleSpeech()">
+            <div id="speech-btn" class="play-btn-green" onclick="toggleSpeech()">
                 <span id="btn-icon">▶️</span> <span id="btn-text">Play Tamil</span>
-            </button>
+            </div>
 
-            <h2 id="tam-word" style="color: green; margin: 5px;"></h2>
+            <h2 id="tam-word" style="color: #2E7D32; margin: 5px; font-size: 2.2rem;"></h2>
         </div>
 
         <button class="btn next-btn" onclick="nextWord()">Next ➡️</button>
@@ -176,8 +193,8 @@
     <script>
         let player;
         let synth = window.speechSynthesis;
-        let currentUtterance = null;
-
+        
+        // Comprehensive word list (10 each)
         const tamilData = {
             fruits: [
                 { eng: "Apple", display: "ஆப்பிள்", img: "https://cdn-icons-png.flaticon.com/512/415/415733.png" },
@@ -189,7 +206,7 @@
                 { eng: "Watermelon", display: "தர்பூசணி", img: "https://cdn-icons-png.flaticon.com/512/2909/2909756.png" },
                 { eng: "Papaya", display: "பப்பாளி", img: "https://cdn-icons-png.flaticon.com/512/2909/2909817.png" },
                 { eng: "Pomegranate", display: "மாதுளை", img: "https://cdn-icons-png.flaticon.com/512/2909/2909852.png" },
-                { eng: "Jackfruit", display: "பலாப்பழம்", img: "https://cdn-icons-png.flaticon.com/512/1141/1141769.png" }
+                { eng: "Guava", display: "கொய்யா", img: "https://cdn-icons-png.flaticon.com/512/2909/2909772.png" }
             ],
             animals: [
                 { eng: "Lion", display: "சிங்கம்", img: "https://cdn-icons-png.flaticon.com/512/616/616412.png" },
@@ -209,16 +226,14 @@
         let currentIndex = 0;
 
         function showScreen(id) {
-            synth.cancel(); // Stop speaking when changing screens
+            synth.cancel();
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            updateBtnToPlay();
+            resetSpeechButton();
         }
 
         function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '200', width: '300', videoId: 'G8G8WwGX0Qc'
-            });
+            player = new YT.Player('player', { height: '240', width: '320', videoId: 'G8G8WwGX0Qc' });
         }
 
         function playSloka(vid, time) {
@@ -243,32 +258,39 @@
             document.getElementById('tamil-img').src = item.img;
             document.getElementById('eng-word').innerText = item.eng;
             document.getElementById('tam-word').innerText = item.display;
-            document.getElementById('progress-bar').style.width = ((currentIndex + 1) / 10 <= 1 ? (currentIndex + 1) * 10 : 100) + "%";
-            updateBtnToPlay();
+            document.getElementById('progress-bar').style.width = ((currentIndex + 1) * 10) + "%";
+            resetSpeechButton();
         }
 
         function toggleSpeech() {
             if (synth.speaking) {
                 synth.cancel();
-                updateBtnToPlay();
+                resetSpeechButton();
             } else {
                 const text = currentCategory[currentIndex].display;
-                currentUtterance = new SpeechSynthesisUtterance(text);
-                currentUtterance.lang = 'ta-IN';
-                currentUtterance.rate = 1.0; // Normal speed
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Force Tamil Voice Selection
+                const voices = synth.getVoices();
+                const tamilVoice = voices.find(v => v.lang.includes('ta') || v.name.toLowerCase().includes('tamil'));
+                
+                if (tamilVoice) utterance.voice = tamilVoice;
+                utterance.lang = 'ta-IN';
+                utterance.rate = 1.0; // Normal Speed
 
-                currentUtterance.onstart = () => {
+                utterance.onstart = () => {
                     document.getElementById('btn-icon').innerText = "⏸️";
                     document.getElementById('btn-text').innerText = "Pause";
                 };
 
-                currentUtterance.onend = () => updateBtnToPlay();
+                utterance.onend = resetSpeechButton;
+                utterance.onerror = resetSpeechButton;
                 
-                synth.speak(currentUtterance);
+                synth.speak(utterance);
             }
         }
 
-        function updateBtnToPlay() {
+        function resetSpeechButton() {
             document.getElementById('btn-icon').innerText = "▶️";
             document.getElementById('btn-text').innerText = "Play Tamil";
         }
@@ -278,10 +300,13 @@
                 currentIndex++;
                 updateTamilCard();
             } else {
-                alert("Wonderful! Category Complete! 🌟");
+                alert("Super! You finished all words! 🌟");
                 showScreen('tamil-category-screen');
             }
         }
+
+        // Initialize voices for mobile browsers
+        window.speechSynthesis.getVoices();
     </script>
 </body>
 </html>
