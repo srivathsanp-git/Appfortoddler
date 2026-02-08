@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Learning | Home</title>
+    <title>Toddler Learning | Colorful Fun</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
         :root {
-            --ios-bg: #F2F2F7;
-            --nike-black: #111111;
+            --bg-home: #FFDEE9; /* Pastel Pink */
+            --bg-math: #D5FFDE; /* Pastel Mint */
+            --bg-fruit: #E0E7FF; /* Pastel Blue */
+            --bg-stickers: #FEF3C7; /* Pastel Yellow */
             --apple-blue: #007AFF;
             --apple-green: #34C759;
-            --apple-yellow: #FFCC00;
-            --apple-purple: #AF52DE;
-            --apple-red: #FF3B30;
-            --card-shadow: 0 20px 40px rgba(0,0,0,0.1);
             --radius: 32px;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--ios-bg); color: var(--nike-black); overflow: hidden; height: 100vh; }
+        body { font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; transition: background 0.5s ease; }
 
-        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; }
+        /* Screen Backgrounds */
+        #home-screen { background: var(--bg-home); }
+        #math-op-screen, #difficulty-screen { background: var(--bg-math); }
+        #game-screen { background: var(--bg-fruit); }
+        #sticker-screen { background: var(--bg-stickers); }
+
+        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; position: relative; }
         .active { display: flex; }
 
-        /* Menu Styles */
+        /* Sparkle Canvas */
+        #sparkle-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 3000; width: 100%; height: 100%; }
+
         .menu-container { justify-content: center; gap: 15px; overflow-y: auto; text-align: center; }
         .menu-btn { 
             width: 100%; max-width: 350px; padding: 22px; border-radius: 24px; 
@@ -34,120 +40,113 @@
         }
         .menu-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,0.1); }
 
-        /* Progress Bar */
-        .prog-wrap { width: 100%; max-width: 450px; margin-bottom: 10px; }
-        .prog-bar-outer { height: 14px; background: #E5E5EA; border-radius: 7px; overflow: hidden; }
-        .prog-bar-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
-
-        /* Main Game Card */
         .main-card { 
-            background: white; width: 100%; max-width: 450px; border-radius: var(--radius); 
-            box-shadow: var(--card-shadow); flex: 1; display: flex; flex-direction: column; 
-            margin-bottom: 15px; overflow: hidden; 
+            background: rgba(255, 255, 255, 0.9); width: 100%; max-width: 450px; border-radius: var(--radius); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); flex: 1; display: flex; flex-direction: column; 
+            margin-bottom: 15px; overflow: hidden; border: 4px solid white;
         }
 
-        /* Math Visuals */
-        .visual-row { display: flex; align-items: center; justify-content: center; gap: 15px; padding: 15px; background: #fafafa; }
+        .visual-row { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px; }
         .visual-box { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; flex: 1; }
-        .num-label { font-size: 3rem; font-weight: 900; color: var(--nike-black); min-width: 50px; text-align: center; }
-        .mini-fruit { width: 65px; height: 65px; object-fit: contain; transition: 0.1s; }
-        .mini-fruit:active { transform: scale(1.3); }
+        .num-label { font-size: 3.5rem; font-weight: 900; color: #111; min-width: 60px; text-align: center; }
+        .mini-fruit { width: 70px; height: 70px; object-fit: contain; }
 
-        /* Inputs */
-        .math-op-sign { font-size: 4rem; font-weight: 900; color: var(--apple-blue); margin: 0; }
-        .answer-input { width: 60%; font-size: 4.5rem; text-align: center; border: 5px solid var(--ios-bg); border-radius: 25px; display: block; margin: 10px auto; font-weight: 900; }
+        .math-op-sign { font-size: 4rem; font-weight: 900; color: var(--apple-blue); text-align: center; margin: 0; }
+        .answer-input { width: 60%; font-size: 5rem; text-align: center; border: 5px solid #eee; border-radius: 25px; display: block; margin: 10px auto; font-weight: 900; background: white; }
 
-        /* Overlay */
+        .footer-nav { width: 100%; display: flex; justify-content: center; padding: 15px 0; }
+        .home-btn-bottom { 
+            background: white; color: #111; padding: 12px 30px; 
+            border-radius: 50px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 2px solid #ddd;
+            cursor: pointer; font-size: 1.1rem;
+        }
+
         #discovery-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
             z-index: 2000; flex-direction: column; align-items: center; justify-content: center; color: white;
         }
-        .sunburst { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, var(--apple-yellow) 0%, transparent 70%); animation: rotate 20s linear infinite; z-index: -1; }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .footer-nav { padding-bottom: 15px; }
-        .home-link { font-weight: 800; color: #8E8E93; cursor: pointer; text-decoration: none; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
+    <canvas id="sparkle-canvas"></canvas>
+
     <div id="home-screen" class="screen active menu-container">
-        <h1 style="font-size: 2.5rem;">Main Menu</h1>
-        <button class="menu-btn" style="background:var(--apple-purple)" onclick="showStickers()">⭐ STICKER BOOK</button>
-        <hr style="width: 80%; opacity: 0.3;">
+        <h1 style="font-size: 2.8rem; color: #D81B60;">Kids Play! 🎨</h1>
+        <button class="menu-btn" style="background:#AF52DE" onclick="showStickers()">⭐ STICKER BOOK</button>
         <button class="menu-btn" style="background:#FF9500" onclick="startApp('fruits')">🍎 FRUIT NAMES</button>
-        <button class="menu-btn" style="background:var(--apple-blue)" onclick="showMathOps()">➕ MATH GAMES</button>
+        <button class="menu-btn" style="background:#007AFF" onclick="showMathOps()">➕ MATH GAMES</button>
     </div>
 
     <div id="math-op-screen" class="screen menu-container">
-        <h1>Pick Math Type</h1>
-        <button class="menu-btn" style="background:var(--apple-green)" onclick="selectOp('+')">ADDITION (+)</button>
-        <button class="menu-btn" style="background:var(--apple-red)" onclick="selectOp('-')">SUBTRACTION (-)</button>
-        <button class="menu-btn" style="background:var(--apple-purple)" onclick="selectOp('*')">MULTIPLICATION (×)</button>
-        <div class="footer-nav"><span class="home-link" onclick="goHome()">🏠 HOME</span></div>
+        <h1 style="color: #2E7D32;">Choose Math</h1>
+        <button class="menu-btn" style="background:#34C759" onclick="selectOp('+')">ADDITION (+)</button>
+        <button class="menu-btn" style="background:#FF3B30" onclick="selectOp('-')">SUBTRACTION (-)</button>
+        <button class="menu-btn" style="background:#AF52DE" onclick="selectOp('*')">MULTIPLICATION (×)</button>
+        <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
     <div id="difficulty-screen" class="screen menu-container">
-        <h1>How Hard?</h1>
-        <button class="menu-btn" style="background:var(--apple-green)" onclick="setDifficulty('easy')">EASY (1-5)</button>
-        <button class="menu-btn" style="background:var(--apple-yellow); color:black;" onclick="setDifficulty('med')">MEDIUM (1-10)</button>
-        <button class="menu-btn" style="background:var(--apple-red)" onclick="setDifficulty('hard')">HARD (1-20)</button>
-        <div class="footer-nav"><span class="home-link" onclick="goHome()">🏠 HOME</span></div>
+        <h1 style="color: #2E7D32;">How Big?</h1>
+        <button class="menu-btn" style="background:#34C759" onclick="setDifficulty('easy')">SMALL (1-5)</button>
+        <button class="menu-btn" style="background:#FFCC00; color:black;" onclick="setDifficulty('med')">MEDIUM (1-10)</button>
+        <button class="menu-btn" style="background:#FF3B30" onclick="setDifficulty('hard')">BIG (1-20)</button>
+        <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
     <div id="sticker-screen" class="screen">
-        <h1>My Stickers</h1>
-        <div id="sticker-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; padding:20px;"></div>
-        <button class="menu-btn" style="background:var(--apple-blue)" onclick="goHome()">BACK</button>
+        <h1>My Collection</h1>
+        <div id="sticker-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; padding:20px; flex:1; overflow-y:auto; width:100%;"></div>
+        <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
     <div id="game-screen" class="screen">
-        <div class="prog-wrap">
-            <div id="prog-label" style="text-align:right; font-weight:700; color:#8E8E93;">0/5</div>
-            <div class="prog-bar-outer"><div id="prog-bar" class="prog-bar-inner"></div></div>
+        <div style="width:100%; max-width:450px; margin-bottom:10px;">
+            <div id="prog-label" style="text-align:right; font-weight:900; color:#555;">0/5</div>
         </div>
         <div class="main-card">
             <div id="ui-fruits" style="display:none; flex:1; flex-direction:column; align-items:center; justify-content:center;">
-                <img id="f-img" style="max-width:80%; height:250px; object-fit:contain;" src="">
-                <h2 id="f-txt" style="font-size:3.5rem; margin:20px 0;"></h2>
-                <button onclick="speakFruit()" style="width:90%; padding:20px; border-radius:20px; background:var(--apple-blue); color:white; border:none; font-weight:900; font-size:1.5rem;">🔊 SAY IT</button>
+                <img id="f-img" style="max-width:85%; height:280px; object-fit:contain;" src="">
+                <h2 id="f-txt" style="font-size:4rem; margin:20px 0;"></h2>
+                <button onclick="speakFruit()" style="width:90%; padding:25px; border-radius:25px; background:#007AFF; color:white; border:none; font-weight:900; font-size:1.8rem;">🔊 SAY IT</button>
             </div>
             <div id="ui-math" style="display:none; flex:1; flex-direction:column;">
                 <div class="visual-row">
                     <div id="v-group1" class="visual-box"></div>
                     <div id="v-num1" class="num-label">0</div>
                 </div>
-                <div id="v-op-sign" class="math-op-sign" style="text-align:center;">+</div>
+                <div id="v-op-sign" class="math-op-sign">+</div>
                 <div class="visual-row">
                     <div id="v-group2" class="visual-box"></div>
                     <div id="v-num2" class="num-label">0</div>
                 </div>
                 <div style="padding:20px; text-align:center;">
                     <input type="number" id="m-ans" class="answer-input" placeholder="?" inputmode="numeric">
-                    <button onclick="checkMath()" style="width:100%; padding:20px; border-radius:20px; background:var(--apple-green); color:white; border:none; font-weight:900; font-size:1.5rem;">CHECK</button>
+                    <button onclick="checkMath()" style="width:100%; padding:25px; border-radius:25px; background:#34C759; color:white; border:none; font-weight:900; font-size:2rem;">CHECK</button>
                 </div>
             </div>
         </div>
-        <div class="footer-nav"><span class="home-link" onclick="goHome()">🏠 HOME</span></div>
+        <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
     <div id="discovery-overlay" onclick="closeDiscovery()">
-        <div class="sunburst"></div>
-        <h2>NEW STICKER!</h2>
-        <img id="new-sticker-img" style="width:200px; height:200px; object-fit:contain;" src="">
-        <h1 id="new-sticker-name" style="color:var(--apple-yellow);"></h1>
-        <p>Tap to continue</p>
+        <img id="new-sticker-img" style="width:250px; height:250px; object-fit:contain;" src="">
+        <h1 id="new-sticker-name" style="color:#FFCC00; font-size: 3rem;"></h1>
+        <p>You found a new sticker!</p>
     </div>
 
     <script>
+        const canvas = document.getElementById('sparkle-canvas');
+        const ctx = canvas.getContext('2d');
         const synth = window.speechSynthesis;
-        const folder = "fruits/";
         const fruitData = ["apple", "banana", "mango", "orange", "strawberry", "pineapple", "grapes", "watermelon", "cherry"];
+        const folder = "fruits/";
         
-        let state = {
-            mode: '', op: '+', level: 'easy', idx: 0, 
-            ans: 0, stickers: JSON.parse(localStorage.getItem('stickers')) || []
-        };
+        let particles = [];
+        let state = { mode: '', op: '+', level: 'easy', idx: 0, ans: 0, stickers: JSON.parse(localStorage.getItem('stickers')) || [] };
+
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
 
         function goHome() { location.reload(); }
         function showMathOps() { switchScreen('math-op-screen'); }
@@ -160,77 +159,89 @@
         }
 
         function startApp(mode) {
-            state.mode = mode;
-            state.idx = 0;
+            state.mode = mode; state.idx = 0;
             switchScreen('game-screen');
-            if(mode === 'fruits') {
-                document.getElementById('ui-fruits').style.display = 'flex';
-                document.getElementById('ui-math').style.display = 'none';
-                updateFruit();
-            } else {
-                document.getElementById('ui-fruits').style.display = 'none';
-                document.getElementById('ui-math').style.display = 'flex';
-                generateMath();
-            }
+            document.getElementById('ui-fruits').style.display = mode === 'fruits' ? 'flex' : 'none';
+            document.getElementById('ui-math').style.display = mode === 'math' ? 'flex' : 'none';
+            if(mode === 'fruits') updateFruit(); else generateMath();
         }
 
         function updateFruit() {
             const f = fruitData[state.idx];
             document.getElementById('f-img').src = `${folder}${f}.png`;
             document.getElementById('f-txt').innerText = f.toUpperCase();
-            updateProg(state.idx + 1, fruitData.length);
+            document.getElementById('prog-label').innerText = `${state.idx+1}/${fruitData.length}`;
         }
 
         function speakFruit() {
-            const u = new SpeechSynthesisUtterance(fruitData[state.idx]);
-            u.onend = () => {
+            say(fruitData[state.idx]);
+            triggerSparkles();
+            setTimeout(() => {
                 state.idx++;
                 if(state.idx < fruitData.length) updateFruit();
-                else goHome();
-            };
-            synth.speak(u);
+                else say("You learned them all! Good job!");
+            }, 1500);
         }
 
         function generateMath() {
             let max = state.level === 'easy' ? 5 : state.level === 'med' ? 10 : 20;
             let a = Math.floor(Math.random() * max) + 1;
             let b = Math.floor(Math.random() * max) + 1;
-            
             if(state.op === '-' && a < b) [a, b] = [b, a];
             state.ans = eval(`${a}${state.op}${b}`);
-
             document.getElementById('v-op-sign').innerText = state.op.replace('*','×');
             document.getElementById('v-num1').innerText = a;
             document.getElementById('v-num2').innerText = b;
-            
             drawVisuals('v-group1', a, fruitData[0]);
             drawVisuals('v-group2', b, fruitData[1]);
             document.getElementById('m-ans').value = '';
-            updateProg(state.idx + 1, 5);
+            document.getElementById('prog-label').innerText = `${state.idx+1}/5`;
         }
 
         function drawVisuals(id, count, img) {
             const div = document.getElementById(id);
             div.innerHTML = '';
-            for(let i=0; i<count; i++) {
-                div.innerHTML += `<img src="${folder}${img}.png" class="mini-fruit">`;
-            }
+            for(let i=0; i<count; i++) div.innerHTML += `<img src="${folder}${img}.png" class="mini-fruit">`;
         }
 
         function checkMath() {
-            const val = parseInt(document.getElementById('m-ans').value);
-            if(val === state.ans) {
+            if(parseInt(document.getElementById('m-ans').value) === state.ans) {
+                triggerSparkles();
+                say("Hooray! You got it right! Next one!");
                 const f = fruitData[Math.floor(Math.random() * fruitData.length)];
                 if(!state.stickers.includes(f)) {
                     state.stickers.push(f);
                     localStorage.setItem('stickers', JSON.stringify(state.stickers));
-                    showDiscovery(f);
-                } else { say("Right!"); }
+                    setTimeout(() => showDiscovery(f), 1000);
+                }
                 state.idx++;
-                if(state.idx >= 5) setTimeout(goHome, 2000);
-                else setTimeout(generateMath, 1500);
-            } else { say("Try again"); }
+                if(state.idx >= 5) setTimeout(goHome, 3000);
+                else setTimeout(generateMath, 2000);
+            } else { say("Try again!"); }
         }
+
+        function triggerSparkles() {
+            for(let i=0; i<30; i++) {
+                particles.push({
+                    x: canvas.width/2, y: canvas.height/2,
+                    vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10,
+                    size: Math.random()*10+5, color: `hsl(${Math.random()*360}, 80%, 60%)`, life: 1
+                });
+            }
+        }
+
+        function animateSparkles() {
+            ctx.clearRect(0,0,canvas.width,canvas.height);
+            particles.forEach((p,i) => {
+                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+                if(p.life <= 0) particles.splice(i,1);
+            });
+            requestAnimationFrame(animateSparkles);
+        }
+        animateSparkles();
 
         function showDiscovery(f) {
             document.getElementById('new-sticker-img').src = `${folder}${f}.png`;
@@ -245,17 +256,13 @@
             grid.innerHTML = '';
             fruitData.forEach(f => {
                 const earned = state.stickers.includes(f);
-                grid.innerHTML += `<div style="background:white; border-radius:15px; height:80px; display:flex; align-items:center; justify-content:center;">
-                    <img src="${folder}${f}.png" style="width:60%; opacity:${earned?1:0.1}; filter:grayscale(${earned?0:1})">
+                grid.innerHTML += `<div style="background:white; border-radius:15px; height:100px; display:flex; align-items:center; justify-content:center;">
+                    <img src="${folder}${f}.png" style="width:70%; opacity:${earned?1:0.1}; filter:grayscale(${earned?0:1})">
                 </div>`;
             });
         }
 
-        function updateProg(c, t) {
-            document.getElementById('prog-bar').style.width = (c/t)*100 + '%';
-            document.getElementById('prog-label').innerText = `${c}/${t}`;
-        }
-        function say(t) { synth.cancel(); synth.speak(new SpeechSynthesisUtterance(t)); }
+        function say(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.pitch = 1.3; synth.speak(u); }
     </script>
 </body>
 </html>
