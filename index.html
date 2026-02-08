@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ta">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tamil Toddler Pro | Emotional Intelligence</title>
+    <title>Toddler Talk | English Flashcards</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
         :root {
             --ios-bg: #F2F2F7;
@@ -19,7 +19,7 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: 'Inter', sans-serif;
             margin: 0; background-color: var(--ios-bg); color: var(--nike-black);
             height: 100vh; display: flex; flex-direction: column; overflow: hidden;
         }
@@ -35,32 +35,32 @@
         .active { display: flex; }
 
         .progress-header { width: 100%; max-width: 450px; margin-bottom: 15px; }
-        .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.9rem; color: #8E8E93; margin-bottom: 5px; }
-        .progress-outer { height: 8px; background: #E5E5EA; border-radius: 4px; overflow: hidden; }
+        .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 1rem; color: #8E8E93; margin-bottom: 5px; }
+        .progress-outer { height: 10px; background: #E5E5EA; border-radius: 5px; overflow: hidden; }
         .progress-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
 
         .main-card {
             background: white; width: 100%; max-width: 450px; border-radius: var(--radius);
             overflow: hidden; box-shadow: var(--card-shadow); flex: 1;
-            display: flex; flex-direction: column; margin-bottom: 100px;
+            display: flex; flex-direction: column; margin-bottom: 90px;
         }
 
-        .img-container { width: 100%; height: 55%; background: #E5E5EA; position: relative; }
+        .img-container { width: 100%; height: 65%; background: #E5E5EA; position: relative; }
         .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
 
         .content { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .tam-txt { font-size: 2.8rem; font-weight: 900; margin: 10px 0; }
+        .eng-txt { font-size: 3.5rem; font-weight: 900; margin: 0 0 15px 0; letter-spacing: -1px; }
         
         .play-bar {
-            background: var(--success-green); color: white; padding: 18px; border-radius: 20px;
+            background: var(--apple-blue); color: white; padding: 20px; border-radius: 24px;
             display: flex; align-items: center; justify-content: center; gap: 12px;
-            font-size: 1.2rem; font-weight: 800; cursor: pointer;
+            font-size: 1.4rem; font-weight: 800; cursor: pointer;
         }
 
         .next-btn {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: var(--nike-black); color: white; padding: 20px;
-            border-radius: 50px; font-size: 1.2rem; font-weight: 800; width: 90%; max-width: 400px; border: none;
+            background: var(--nike-black); color: white; padding: 22px;
+            border-radius: 50px; font-size: 1.3rem; font-weight: 800; width: 90%; max-width: 400px; border: none;
         }
 
         #celebration {
@@ -68,8 +68,8 @@
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
-        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; }
-        .cat-btn { background: white; padding: 25px; border-radius: 24px; box-shadow: var(--card-shadow); font-weight: 700; text-align: center; cursor: pointer; }
+        .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; margin-top: 20px; }
+        .cat-btn { background: white; padding: 35px 20px; border-radius: var(--radius); box-shadow: var(--card-shadow); font-weight: 700; font-size: 1.2rem; text-align: center; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -80,7 +80,8 @@
     </div>
 
     <div id="home-screen" class="screen active">
-        <h1 style="margin-top:40px; font-weight: 900;">LEARN TAMIL</h1>
+        <h1 style="margin-top:60px; font-size: 2.5rem; font-weight: 900;">TODDLER TALK</h1>
+        <p style="color: #8E8E93;">Choose a category to start</p>
         <div class="cat-grid">
             <div class="cat-btn" onclick="start('fruits')">🍓<br>Fruits</div>
             <div class="cat-btn" onclick="start('animals')">🦁<br>Animals</div>
@@ -103,51 +104,64 @@
                 <img id="m-img" class="main-img" onerror="handleImageError(this)">
             </div>
             <div class="content">
-                <div id="m-eng" style="color:#8E8E93; font-weight:700; letter-spacing:1px"></div>
-                <div id="m-tam" class="tam-txt"></div>
+                <div id="m-eng" class="eng-txt"></div>
                 <div class="play-bar" onclick="speak()">
-                    <span id="v-icon">▶</span> <span id="v-label">LISTEN</span>
+                    <span id="v-icon">🔊</span> <span id="v-label">SAY IT</span>
                 </div>
             </div>
         </div>
-        <button class="next-btn" onclick="next()">CONTINUE</button>
+        <button class="next-btn" onclick="next()">NEXT WORD</button>
     </div>
 
     <div id="celebration">
-        <span style="font-size: 5rem;">🏆</span>
-        <h1 style="font-size: 3rem; margin: 10px 0;">Great Job!</h1>
-        <button class="next-btn" style="position:static" onclick="location.reload()">PLAY AGAIN</button>
+        <span style="font-size: 6rem;">🌟</span>
+        <h1 style="font-size: 3rem; margin: 10px 0;">All Done!</h1>
+        <button class="next-btn" style="position:static; margin-top: 20px;" onclick="location.reload()">START AGAIN</button>
     </div>
 
     <script>
         const synth = window.speechSynthesis;
         const db = {
             fruits: [
-                {e:"Apple", t:"ஆப்பிள்", i:"https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=600", alt:"https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?w=600"},
-                {e:"Mango", t:"மாம்பழம்", i:"https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=600", alt:"https://images.pexels.com/photos/2294471/pexels-photo-2294471.jpeg?w=600"},
-                {e:"Banana", t:"வாழைப்பழம்", i:"https://images.unsplash.com/photo-1528825871115-3581a5387919?w=600", alt:"https://images.pexels.com/photos/2870882/pexels-photo-2870882.jpeg?w=600"},
-                {e:"Grapes", t:"திராட்சை", i:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600", alt:"https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?w=600"},
-                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600", alt:"https://images.pexels.com/photos/161559/orange-fruit-vitamins-healthy-eating-161559.jpeg?w=600"},
-                {e:"Pineapple", t:"அன்னாசி", i:"https://images.unsplash.com/photo-1550258114-68bd299738ad?w=600", alt:"https://images.pexels.com/photos/947885/pexels-photo-947885.jpeg?w=600"},
-                {e:"Watermelon", t:"தர்பூசணி", i:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600", alt:"https://images.pexels.com/photos/1313267/pexels-photo-1313267.jpeg?w=600"},
-                {e:"Strawberry", t:"ஸ்ட்ராபெரி", i:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600", alt:"https://images.pexels.com/photos/93405/pexels-photo-93405.jpeg?w=600"},
-                {e:"Raspberry", t:"ராஸ்பெர்ரி", i:"https://images.unsplash.com/photo-1534073828943-f801091bb18c?w=600", alt:"https://images.pexels.com/photos/59945/strawberry-fruit-berry-red-59945.jpeg?w=600"},
-                {e:"Blueberry", t:"ப்ளூபெர்ரி", i:"https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=600", alt:"https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?w=600"}
+                {e:"Apple", i:"https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=600", alt:"https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?w=600"},
+                {e:"Mango", i:"https://images.unsplash.com/photo-1553279768-865429fa0078?w=600", alt:"https://images.pexels.com/photos/2294471/pexels-photo-2294471.jpeg?w=600"},
+                {e:"Banana", i:"https://images.unsplash.com/photo-1528825871115-3581a5387919?w=600", alt:"https://images.pexels.com/photos/2870882/pexels-photo-2870882.jpeg?w=600"},
+                {e:"Grapes", i:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600", alt:"https://images.pexels.com/photos/708777/pexels-photo-708777.jpeg?w=600"},
+                {e:"Orange", i:"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600", alt:"https://images.pexels.com/photos/161559/orange-fruit-vitamins-healthy-eating-161559.jpeg?w=600"},
+                {e:"Pineapple", i:"https://images.unsplash.com/photo-1550258114-68bd299738ad?w=600", alt:"https://images.pexels.com/photos/947885/pexels-photo-947885.jpeg?w=600"},
+                {e:"Watermelon", i:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600", alt:"https://images.pexels.com/photos/1313267/pexels-photo-1313267.jpeg?w=600"},
+                {e:"Strawberry", i:"https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=600", alt:"https://images.pexels.com/photos/93405/pexels-photo-93405.jpeg?w=600"},
+                {e:"Raspberry", i:"https://images.unsplash.com/photo-1534073828943-f801091bb18c?w=600", alt:"https://images.pexels.com/photos/59945/strawberry-fruit-berry-red-59945.jpeg?w=600"},
+                {e:"Blueberry", i:"https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=600", alt:"https://images.pexels.com/photos/1128678/pexels-photo-1128678.jpeg?w=600"}
+            ],
+            animals: [
+                {e:"Lion", i:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600", alt:"https://images.pexels.com/photos/33045/lion-wild-africa-african.jpg?w=600"},
+                {e:"Elephant", i:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600", alt:"https://images.pexels.com/photos/66898/elephant-cub-tsavo-kenya-66898.jpeg?w=600"},
+                {e:"Tiger", i:"https://images.unsplash.com/photo-1508817628294-5a453fa0b8fb?w=600", alt:"https://images.pexels.com/photos/41315/tiger-wildlife-animal-cat-41315.jpeg?w=600"},
+                {e:"Cow", i:"https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=600", alt:"https://images.pexels.com/photos/235731/pexels-photo-235731.jpeg?w=600"},
+                {e:"Dog", i:"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600", alt:"https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?w=600"},
+                {e:"Cat", i:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", alt:"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?w=600"},
+                {e:"Horse", i:"https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600", alt:"https://images.pexels.com/photos/52500/horse-herd-fog-nature-52500.jpeg?w=600"},
+                {e:"Monkey", i:"https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=600", alt:"https://images.pexels.com/photos/1138460/pexels-photo-1138460.jpeg?w=600"},
+                {e:"Rabbit", i:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600", alt:"https://images.pexels.com/photos/372166/pexels-photo-372166.jpeg?w=600"},
+                {e:"Deer", i:"https://images.unsplash.com/photo-1484406566174-9da000fd267c?w=600", alt:"https://images.pexels.com/photos/162203/deer-wildlife-nature.jpeg?w=600"}
             ],
             moods: [
-                {e:"Happy", t:"மகிழ்ச்சி", i:"https://images.unsplash.com/photo-1502541229470-761741e7360b?w=600", alt:"https://images.pexels.com/photos/35537/child-children-girl-sad.jpg?w=600"},
-                {e:"Sad", t:"வருத்தம்", i:"https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?w=600", alt:"https://images.pexels.com/photos/1162461/pexels-photo-1162461.jpeg?w=600"},
-                {e:"Excited", t:"பரவசம்", i:"https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=600", alt:"https://images.pexels.com/photos/1493111/pexels-photo-1493111.jpeg?w=600"},
-                {e:"Angry", t:"கோபம்", i:"https://images.unsplash.com/photo-1577467261905-64582f34f783?w=600", alt:"https://images.pexels.com/photos/3806742/pexels-photo-3806742.jpeg?w=600"},
-                {e:"Scared", t:"பயம்", i:"https://images.unsplash.com/photo-1542034176-599a0a4c07d3?w=600", alt:"https://images.pexels.com/photos/6320092/pexels-photo-6320092.jpeg?w=600"},
-                {e:"Tired", t:"சோர்வு", i:"https://images.unsplash.com/photo-1511289081-d06dba19bfbd?w=600", alt:"https://images.pexels.com/photos/3845492/pexels-photo-3845492.jpeg?w=600"},
-                {e:"Surprised", t:"ஆச்சரியம்", i:"https://images.unsplash.com/photo-1481824429379-07aa5e5b0739?w=600", alt:"https://images.pexels.com/photos/6321285/pexels-photo-6321285.jpeg?w=600"},
-                {e:"Love", t:"அன்பு", i:"https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600", alt:"https://images.pexels.com/photos/161551/child-mother-daughter-love-161551.jpeg?w=600"},
-                {e:"Proud", t:"பெருமிதம்", i:"https://images.unsplash.com/photo-1544717297-fa95b8ee4a31?w=600", alt:"https://images.pexels.com/photos/3933221/pexels-photo-3933221.jpeg?w=600"},
-                {e:"Silly", t:"கேலி", i:"https://images.unsplash.com/photo-1530652101053-8c0db4fbb5de?w=600", alt:"https://images.pexels.com/photos/3662804/pexels-photo-3662804.jpeg?w=600"}
+                {e:"Happy", i:"https://images.unsplash.com/photo-1502541229470-761741e7360b?w=600", alt:"https://images.pexels.com/photos/161551/child-mother-daughter-love-161551.jpeg?w=600"},
+                {e:"Sad", i:"https://images.unsplash.com/photo-1471286174890-9c112ffca5b4?w=600", alt:"https://images.pexels.com/photos/35537/child-children-girl-sad.jpg?w=600"},
+                {e:"Excited", i:"https://images.unsplash.com/photo-1519238263530-99bdd11df2ea?w=600", alt:"https://images.pexels.com/photos/1493111/pexels-photo-1493111.jpeg?w=600"},
+                {e:"Angry", i:"https://images.unsplash.com/photo-1577467261905-64582f34f783?w=600", alt:"https://images.pexels.com/photos/3806742/pexels-photo-3806742.jpeg?w=600"},
+                {e:"Scared", i:"https://images.unsplash.com/photo-1542034176-599a0a4c07d3?w=600", alt:"https://images.pexels.com/photos/6320092/pexels-photo-6320092.jpeg?w=600"},
+                {e:"Tired", i:"https://images.unsplash.com/photo-1511289081-d06dba19bfbd?w=600", alt:"https://images.pexels.com/photos/3845492/pexels-photo-3845492.jpeg?w=600"}
             ],
-            animals: [ /* ... keeping from previous update ... */ ],
-            actions: [ /* ... keeping from previous update ... */ ]
+            actions: [
+                {e:"Run", i:"https://images.unsplash.com/photo-1530143311094-34d807799e8f?w=600", alt:"https://images.pexels.com/photos/607490/pexels-photo-607490.jpeg?w=600"},
+                {e:"Jump", i:"https://images.unsplash.com/photo-1516541196182-6bdb0516ed27?w=600", alt:"https://images.pexels.com/photos/1261427/pexels-photo-1261427.jpeg?w=600"},
+                {e:"Eat", i:"https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?w=600", alt:"https://images.pexels.com/photos/1148496/pexels-photo-1148496.jpeg?w=600"},
+                {e:"Sleep", i:"https://images.unsplash.com/photo-1520206183501-b80af970d8c3?w=600", alt:"https://images.pexels.com/photos/914910/pexels-photo-914910.jpeg?w=600"},
+                {e:"Drink", i:"https://images.unsplash.com/photo-1556767667-0716dc366f6f?w=600", alt:"https://images.pexels.com/photos/1188383/pexels-photo-1188383.jpeg?w=600"},
+                {e:"Laugh", i:"https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=600", alt:"https://images.pexels.com/photos/1110271/pexels-photo-1110271.jpeg?w=600"}
+            ]
         };
 
         let set = [], idx = 0;
@@ -172,8 +186,7 @@
             img.src = item.i;
             img.onload = () => img.style.opacity = 1;
             
-            document.getElementById('m-eng').innerText = item.e.toUpperCase();
-            document.getElementById('m-tam').innerText = item.t;
+            document.getElementById('m-eng').innerText = item.e;
             
             const p = ((idx + 1) / set.length) * 100;
             document.getElementById('prog-bar').style.width = p + '%';
@@ -183,16 +196,14 @@
 
         function speak() {
             if(synth.speaking) { synth.cancel(); reset(); return; }
-            const u = new SpeechSynthesisUtterance(set[idx].t);
-            u.lang = 'ta-IN';
-            const v = synth.getVoices().find(v => v.lang.includes('ta'));
-            if(v) u.voice = v;
-            u.onstart = () => { document.getElementById('v-icon').innerText = "⏸"; document.getElementById('v-label').innerText = "PAUSE"; };
+            const u = new SpeechSynthesisUtterance(set[idx].e);
+            u.lang = 'en-US'; u.rate = 0.9; // Slightly slower for learning
+            u.onstart = () => { document.getElementById('v-icon').innerText = "⏸"; document.getElementById('v-label').innerText = "STOP"; };
             u.onend = reset;
             synth.speak(u);
         }
 
-        function reset() { document.getElementById('v-icon').innerText = "▶"; document.getElementById('v-label').innerText = "LISTEN"; }
+        function reset() { document.getElementById('v-icon').innerText = "🔊"; document.getElementById('v-label').innerText = "SAY IT"; }
 
         function next() {
             if(idx < set.length - 1) { idx++; update(); }
