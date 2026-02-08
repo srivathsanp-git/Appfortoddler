@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Fruits | Auto-Flow</title>
+    <title>Toddler Fruits | Random & Celebration</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
@@ -26,38 +26,55 @@
         .screen { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; }
 
         .progress-header { width: 100%; max-width: 450px; margin-bottom: 15px; }
-        .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: #8E8E93; margin-bottom: 8px; }
-        .progress-outer { height: 12px; background: #E5E5EA; border-radius: 6px; overflow: hidden; }
+        .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 1rem; color: #8E8E93; margin-bottom: 8px; }
+        .progress-outer { height: 10px; background: #E5E5EA; border-radius: 5px; overflow: hidden; }
         .progress-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
 
         .main-card {
             background: white; width: 100%; max-width: 450px; border-radius: var(--radius);
             overflow: hidden; box-shadow: var(--card-shadow); flex: 1;
-            display: flex; flex-direction: column; margin-bottom: 40px; /* Reduced margin since button is gone */
+            display: flex; flex-direction: column; margin-bottom: 30px;
         }
 
-        .img-container { width: 100%; height: 70%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
+        .img-container { width: 100%; height: 60%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
         .main-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.3s; }
 
-        .content { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
-        .eng-txt { font-size: 3.5rem; font-weight: 900; margin: 0 0 10px 0; letter-spacing: -2px; text-transform: uppercase; }
-        
-        .play-bar {
-            background: var(--apple-blue); color: white; padding: 24px; border-radius: 24px;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            font-size: 1.6rem; font-weight: 800; cursor: pointer;
-            transition: transform 0.1s active;
+        .content { 
+            padding: 10px 20px; text-align: center; flex: 1; 
+            display: flex; flex-direction: column; justify-content: space-evenly; 
         }
-        .play-bar:active { transform: scale(0.98); }
 
+        /* Responsive Text: Fits inside the box */
+        .eng-txt { 
+            font-size: 12vw; /* Dynamically scales with screen width */
+            max-font-size: 80px;
+            font-weight: 900; 
+            margin: 0; 
+            letter-spacing: -2px; 
+            text-transform: uppercase;
+            word-wrap: break-word;
+            line-height: 1;
+        }
+        
+        @media(min-width: 500px) { .eng-txt { font-size: 60px; } }
+
+        .play-bar {
+            background: var(--apple-blue); color: white; padding: 20px; border-radius: 24px;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            font-size: 1.4rem; font-weight: 800; cursor: pointer;
+        }
+
+        /* Celebration Screen */
         #celebration {
             display: none; position: fixed; inset: 0; background: white; z-index: 1000;
             flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
         
+        #confetti-canvas { position: absolute; inset: 0; pointer-events: none; }
+
         .reset-btn {
-            background: var(--nike-black); color: white; padding: 22px 50px;
-            border-radius: 50px; font-size: 1.4rem; font-weight: 900; border: none; margin-top: 30px;
+            background: var(--nike-black); color: white; padding: 20px 40px;
+            border-radius: 50px; font-size: 1.3rem; font-weight: 900; border: none; z-index: 10;
         }
     </style>
 </head>
@@ -65,97 +82,122 @@
 
     <div id="app-screen" class="screen">
         <div class="progress-header">
-            <div class="progress-meta">
-                <span>Learning Fruits</span>
-                <span id="prog-label"></span>
-            </div>
+            <div class="progress-meta"><span>Fruit Surprise!</span><span id="prog-label"></span></div>
             <div class="progress-outer"><div id="prog-bar" class="progress-inner"></div></div>
         </div>
 
         <div class="main-card">
-            <div class="img-container">
-                <img id="m-img" class="main-img" src="">
-            </div>
+            <div class="img-container"><img id="m-img" class="main-img" src=""></div>
             <div class="content">
                 <div id="m-eng" class="eng-txt"></div>
-                <div class="play-bar" onclick="speak()">
-                    <span id="v-icon">🔊</span> <span id="v-label">TAP TO HEAR</span>
-                </div>
+                <div class="play-bar" onclick="speak()">🔊 <span>SAY IT</span></div>
             </div>
         </div>
-        <p style="color: #8E8E93; font-weight: 600;">Tap the blue button to continue</p>
     </div>
 
     <div id="celebration">
-        <span style="font-size: 6rem;">✨</span>
-        <h1 style="font-size: 3rem; margin: 10px 0;">Awesome!</h1>
-        <p>You've seen all the fruits.</p>
+        <canvas id="confetti-canvas"></canvas>
+        <span style="font-size: 5rem; z-index: 10;">🎈🥳🎈</span>
+        <h1 style="font-size: 3rem; margin: 10px 0; z-index: 10;">Great Job!</h1>
         <button class="reset-btn" onclick="location.reload()">PLAY AGAIN</button>
     </div>
 
     <script>
         const synth = window.speechSynthesis;
         const folder = "fruits/"; 
-        const fruitItems = [
+        let fruits = [
             "apple.png", "mango.png", "banana.png", "grapes.png", 
             "orange.png", "pineapple.png", "watermelon.png", 
             "strawberry.png", "raspberry.png", "blueberry.png"
         ];
 
+        // Shuffle fruits on load
+        fruits = fruits.sort(() => Math.random() - 0.5);
+
         let idx = 0;
-        let isTransitioning = false;
 
         function update() {
-            isTransitioning = false;
-            const fileName = fruitItems[idx];
-            const fruitName = fileName.replace('.png', ''); 
-            
+            const fileName = fruits[idx];
+            const name = fileName.replace('.png', '');
             const img = document.getElementById('m-img');
+            
             img.style.opacity = 0;
             img.src = folder + fileName;
             img.onload = () => img.style.opacity = 1;
             
-            document.getElementById('m-eng').innerText = fruitName;
-            
-            const p = ((idx + 1) / fruitItems.length) * 100;
-            document.getElementById('prog-bar').style.width = p + '%';
-            document.getElementById('prog-label').innerText = `${idx + 1} / ${fruitItems.length}`;
-            
-            document.getElementById('v-icon').innerText = "🔊";
-            document.getElementById('v-label').innerText = "TAP TO HEAR";
+            document.getElementById('m-eng').innerText = name;
+            document.getElementById('prog-bar').style.width = ((idx + 1) / fruits.length) * 100 + '%';
+            document.getElementById('prog-label').innerText = `${idx + 1} / ${fruits.length}`;
         }
 
         function speak() {
-            if(synth.speaking || isTransitioning) return;
-            
-            const text = fruitItems[idx].replace('.png', '');
-            const u = new SpeechSynthesisUtterance(text);
+            if(synth.speaking) return;
+            const u = new SpeechSynthesisUtterance(fruits[idx].replace('.png', ''));
             u.lang = 'en-US';
             u.rate = 0.8;
-
-            u.onstart = () => {
-                document.getElementById('v-icon').innerText = "💬";
-                document.getElementById('v-label').innerText = "LISTENING...";
-            };
-
-            u.onend = () => {
-                isTransitioning = true;
-                // Wait 1 second after speaking, then go to next
-                setTimeout(() => {
-                    next();
-                }, 1000);
-            };
-
+            u.onend = () => setTimeout(next, 800);
             synth.speak(u);
         }
 
         function next() {
-            if(idx < fruitItems.length - 1) {
+            if(idx < fruits.length - 1) {
                 idx++;
                 update();
             } else {
-                document.getElementById('celebration').style.display = 'flex';
+                startCelebration();
             }
+        }
+
+        function startCelebration() {
+            document.getElementById('app-screen').style.display = 'none';
+            document.getElementById('celebration').style.display = 'flex';
+            renderConfetti();
+        }
+
+        // Simple Canvas Fireworks/Confetti Logic
+        function renderConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            let particles = [];
+
+            for(let i=0; i<100; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    r: Math.random() * 6 + 2,
+                    d: Math.random() * 10,
+                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+                    tilt: Math.random() * 10 - 10
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.lineWidth = p.r;
+                    ctx.strokeStyle = p.color;
+                    ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
+                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+                    ctx.stroke();
+                });
+                updateParticles();
+                requestAnimationFrame(draw);
+            }
+
+            function updateParticles() {
+                particles.forEach(p => {
+                    p.y += Math.cos(p.d) + 1 + p.r/2;
+                    p.x += Math.sin(p.d);
+                    if(p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+            }
+            draw();
         }
 
         window.onload = update;
