@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Fruits | Random & Celebration</title>
+    <title>Toddler Learning | Fruits & Math</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
@@ -11,196 +11,295 @@
             --ios-bg: #F2F2F7;
             --nike-black: #111111;
             --apple-blue: #007AFF;
+            --apple-green: #34C759;
+            --apple-yellow: #FFCC00;
+            --apple-purple: #AF52DE;
+            --apple-red: #FF3B30;
             --card-shadow: 0 20px 40px rgba(0,0,0,0.1);
             --radius: 32px;
         }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: var(--ios-bg); color: var(--nike-black); overflow: hidden; height: 100vh; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            margin: 0; background-color: var(--ios-bg); color: var(--nike-black);
-            height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+        /* Navigation & Containers */
+        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; }
+        .active { display: flex; }
+
+        /* Menu Styles */
+        .menu-container { justify-content: center; gap: 12px; overflow-y: auto; }
+        .menu-btn { 
+            width: 100%; max-width: 350px; padding: 20px; border-radius: 24px; 
+            border: none; font-size: 1.6rem; font-weight: 900; color: white; cursor: pointer;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1); transition: 0.1s;
+        }
+        .menu-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,0.1); }
+
+        /* Progress Bar */
+        .prog-wrap { width: 100%; max-width: 450px; margin-bottom: 10px; }
+        .prog-bar-outer { height: 12px; background: #E5E5EA; border-radius: 6px; overflow: hidden; }
+        .prog-bar-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
+
+        /* Main Card */
+        .main-card { 
+            background: white; width: 100%; max-width: 450px; border-radius: var(--radius); 
+            box-shadow: var(--card-shadow); flex: 1; display: flex; flex-direction: column; 
+            margin-bottom: 15px; overflow: hidden; 
         }
 
-        .screen { display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; }
-
-        .progress-header { width: 100%; max-width: 450px; margin-bottom: 15px; }
-        .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 1rem; color: #8E8E93; margin-bottom: 8px; }
-        .progress-outer { height: 10px; background: #E5E5EA; border-radius: 5px; overflow: hidden; }
-        .progress-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
-
-        .main-card {
-            background: white; width: 100%; max-width: 450px; border-radius: var(--radius);
-            overflow: hidden; box-shadow: var(--card-shadow); flex: 1;
-            display: flex; flex-direction: column; margin-bottom: 30px;
+        /* Math Visuals */
+        .visual-box { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 8px; padding: 10px; background: #fafafa; min-height: 80px; }
+        .fruit-wrapper { position: relative; }
+        .mini-fruit { width: 45px; height: 45px; object-fit: contain; transition: 0.1s; }
+        .mini-fruit:active { transform: scale(1.3); }
+        .count-badge {
+            position: absolute; top: -5px; right: -5px; background: var(--apple-blue);
+            color: white; border-radius: 50%; width: 22px; height: 22px;
+            font-size: 12px; display: flex; align-items: center; justify-content: center;
+            opacity: 0; font-weight: 900; pointer-events: none;
         }
 
-        .img-container { width: 100%; height: 60%; background: #fff; display: flex; align-items: center; justify-content: center; position: relative; }
-        .main-img { width: 100%; height: 100%; object-fit: contain; padding: 20px; transition: opacity 0.3s; }
+        /* Input & UI */
+        .math-op { font-size: 3.5rem; font-weight: 900; color: var(--apple-blue); text-align: center; margin: 5px 0; }
+        .answer-input { width: 60%; font-size: 4rem; text-align: center; border: 5px solid var(--ios-bg); border-radius: 20px; display: block; margin: 10px auto; font-weight: 900; }
+        .hint-btn { background: var(--apple-yellow); color: black; padding: 10px 20px; border-radius: 12px; font-weight: 800; border: none; margin-bottom: 10px; display: none; }
 
-        .content { 
-            padding: 10px 20px; text-align: center; flex: 1; 
-            display: flex; flex-direction: column; justify-content: space-evenly; 
-        }
+        /* Sticker Book */
+        .sticker-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 100%; max-width: 400px; padding: 10px; }
+        .sticker-slot { background: white; border-radius: 20px; height: 90px; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 0 10px rgba(0,0,0,0.05); }
+        .sticker-img { width: 60%; height: 60%; object-fit: contain; filter: grayscale(1) opacity(0.2); }
+        .sticker-earned { filter: grayscale(0) opacity(1); animation: pop 0.5s ease; }
 
-        /* Responsive Text: Fits inside the box */
-        .eng-txt { 
-            font-size: 12vw; /* Dynamically scales with screen width */
-            max-font-size: 80px;
-            font-weight: 900; 
-            margin: 0; 
-            letter-spacing: -2px; 
-            text-transform: uppercase;
-            word-wrap: break-word;
-            line-height: 1;
+        /* Discovery Overlay */
+        #discovery-overlay {
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            z-index: 2000; flex-direction: column; align-items: center; justify-content: center; color: white;
         }
+        .sunburst { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, var(--apple-yellow) 0%, transparent 70%); animation: rotateSun 15s linear infinite; z-index: -1; opacity: 0.5; }
+        .new-sticker-anim { width: 180px; height: 180px; object-fit: contain; animation: pop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
-        @media(min-width: 500px) { .eng-txt { font-size: 60px; } }
-
-        .play-bar {
-            background: var(--apple-blue); color: white; padding: 20px; border-radius: 24px;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            font-size: 1.4rem; font-weight: 800; cursor: pointer;
-        }
-
-        /* Celebration Screen */
-        #celebration {
-            display: none; position: fixed; inset: 0; background: white; z-index: 1000;
-            flex-direction: column; justify-content: center; align-items: center; text-align: center;
-        }
-        
-        #confetti-canvas { position: absolute; inset: 0; pointer-events: none; }
-
-        .reset-btn {
-            background: var(--nike-black); color: white; padding: 20px 40px;
-            border-radius: 50px; font-size: 1.3rem; font-weight: 900; border: none; z-index: 10;
-        }
+        @keyframes rotateSun { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        .home-btn { color: #8E8E93; font-weight: 700; cursor: pointer; padding: 10px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div id="app-screen" class="screen">
-        <div class="progress-header">
-            <div class="progress-meta"><span>Fruit Surprise!</span><span id="prog-label"></span></div>
-            <div class="progress-outer"><div id="prog-bar" class="progress-inner"></div></div>
-        </div>
-
-        <div class="main-card">
-            <div class="img-container"><img id="m-img" class="main-img" src=""></div>
-            <div class="content">
-                <div id="m-eng" class="eng-txt"></div>
-                <div class="play-bar" onclick="speak()">🔊 <span>SAY IT</span></div>
-            </div>
-        </div>
+    <div id="home-screen" class="screen active menu-container">
+        <h1 style="font-size: 2.2rem;">Toddler Fun</h1>
+        <button class="menu-btn" style="background:var(--apple-purple)" onclick="showStickers()">⭐ STICKER BOOK</button>
+        <hr style="width: 80%; border: 0.5px solid #ccc; margin: 10px 0;">
+        <button class="menu-btn" style="background:#FF9500" onclick="startApp('fruits')">🍎 FRUIT NAMES</button>
+        <p style="font-weight: 800; color: #8E8E93; margin: 10px 0 0 0;">MATH LEVELS:</p>
+        <button class="menu-btn" style="background:var(--apple-green); font-size: 1.3rem;" onclick="setMathLevel('easy')">EASY (1-5)</button>
+        <button class="menu-btn" style="background:var(--apple-yellow); color:black; font-size: 1.3rem;" onclick="setMathLevel('med')">MEDIUM (1-10)</button>
+        <button class="menu-btn" style="background:var(--apple-red); font-size: 1.3rem;" onclick="setMathLevel('hard')">HARD (1-20)</button>
     </div>
 
-    <div id="celebration">
-        <canvas id="confetti-canvas"></canvas>
-        <span style="font-size: 5rem; z-index: 10;">🎈🥳🎈</span>
-        <h1 style="font-size: 3rem; margin: 10px 0; z-index: 10;">Great Job!</h1>
-        <button class="reset-btn" onclick="location.reload()">PLAY AGAIN</button>
+    <div id="sticker-screen" class="screen">
+        <h1 style="font-size: 2rem;">My Stickers</h1>
+        <div id="sticker-grid" class="sticker-grid"></div>
+        <button class="menu-btn" style="background:var(--apple-blue); margin-top: 20px;" onclick="goHome()">BACK</button>
+    </div>
+
+    <div id="game-screen" class="screen">
+        <div class="prog-wrap">
+            <div id="prog-label" style="font-weight: 700; color: #8E8E93; text-align: right;">0 / 5</div>
+            <div class="prog-bar-outer"><div id="prog-bar" class="prog-bar-inner"></div></div>
+        </div>
+        <div class="main-card">
+            <div id="fruit-mode-ui" style="display:none; flex:1; flex-direction:column;">
+                <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:20px;">
+                    <img id="f-img" style="max-width:80%; max-height:80%; object-fit:contain;" src="">
+                </div>
+                <div style="padding:20px; text-align:center;">
+                    <div id="f-txt" style="font-size:3.5rem; font-weight:900; margin-bottom:10px;"></div>
+                    <button onclick="speakFruit()" style="width:100%; padding:20px; border-radius:20px; background:var(--apple-blue); color:white; border:none; font-weight:900; font-size:1.5rem;">🔊 SAY IT</button>
+                </div>
+            </div>
+            <div id="math-mode-ui" style="display:none; flex:1; flex-direction:column;">
+                <div id="v-group1" class="visual-box"></div>
+                <div id="v-op" class="math-op">+</div>
+                <div id="v-group2" class="visual-box"></div>
+                <div style="padding: 10px 20px 20px 20px; text-align: center;">
+                    <button id="hint-btn" class="hint-btn" onclick="giveHint()">💡 Need Help?</button>
+                    <input type="number" id="m-ans" class="answer-input" placeholder="?" inputmode="numeric">
+                    <button onclick="checkMath()" style="width:100%; padding:20px; border-radius:20px; background:var(--apple-green); color:white; border:none; font-weight:900; font-size:1.5rem;">CHECK</button>
+                </div>
+            </div>
+        </div>
+        <div class="home-btn" onclick="goHome()">🏠 Home</div>
+    </div>
+
+    <div id="discovery-overlay" onclick="closeDiscovery()">
+        <div class="sunburst"></div>
+        <h2 style="font-size: 1.5rem;">NEW STICKER!</h2>
+        <img id="new-sticker-img" class="new-sticker-anim" src="">
+        <div id="new-sticker-name" style="font-size: 2.5rem; font-weight: 900; color: var(--apple-yellow); margin-top: 15px;"></div>
+        <p style="margin-top: 10px;">Tap to keep playing!</p>
     </div>
 
     <script>
         const synth = window.speechSynthesis;
-        const folder = "fruits/"; 
-        let fruits = [
-            "apple.png", "mango.png", "banana.png", "grapes.png", 
-            "orange.png", "pineapple.png", "watermelon.png", 
-            "strawberry.png", "raspberry.png", "blueberry.png"
-        ];
+        const folder = "fruits/";
+        const fruitData = ["apple", "banana", "mango", "orange", "strawberry", "pineapple", "grapes", "watermelon", "cherry"];
+        
+        let gameState = {
+            mode: '',
+            level: 'easy',
+            idx: 0,
+            mathObj: {},
+            mistakes: 0,
+            tapCount: 0,
+            earnedStickers: JSON.parse(localStorage.getItem('stickers')) || []
+        };
 
-        // Shuffle fruits on load
-        fruits = fruits.sort(() => Math.random() - 0.5);
+        function goHome() { location.reload(); }
 
-        let idx = 0;
-
-        function update() {
-            const fileName = fruits[idx];
-            const name = fileName.replace('.png', '');
-            const img = document.getElementById('m-img');
-            
-            img.style.opacity = 0;
-            img.src = folder + fileName;
-            img.onload = () => img.style.opacity = 1;
-            
-            document.getElementById('m-eng').innerText = name;
-            document.getElementById('prog-bar').style.width = ((idx + 1) / fruits.length) * 100 + '%';
-            document.getElementById('prog-label').innerText = `${idx + 1} / ${fruits.length}`;
+        function setMathLevel(lvl) {
+            gameState.level = lvl;
+            startApp('math');
         }
 
-        function speak() {
-            if(synth.speaking) return;
-            const u = new SpeechSynthesisUtterance(fruits[idx].replace('.png', ''));
-            u.lang = 'en-US';
-            u.rate = 0.8;
-            u.onend = () => setTimeout(next, 800);
+        function startApp(mode) {
+            gameState.mode = mode;
+            gameState.idx = 0;
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('game-screen').classList.add('active');
+            
+            if(mode === 'fruits') {
+                document.getElementById('fruit-mode-ui').style.display = 'flex';
+                document.getElementById('math-mode-ui').style.display = 'none';
+                updateFruit();
+            } else {
+                document.getElementById('fruit-mode-ui').style.display = 'none';
+                document.getElementById('math-mode-ui').style.display = 'flex';
+                generateMath();
+            }
+        }
+
+        // --- FRUIT ENGINE ---
+        function updateFruit() {
+            const name = fruitData[gameState.idx];
+            document.getElementById('f-img').src = `${folder}${name}.png`;
+            document.getElementById('f-txt').innerText = name.toUpperCase();
+            updateProg(gameState.idx + 1, fruitData.length);
+        }
+
+        function speakFruit() {
+            const u = new SpeechSynthesisUtterance(fruitData[gameState.idx]);
+            u.onend = () => {
+                if(gameState.idx < fruitData.length - 1) {
+                    gameState.idx++;
+                    setTimeout(updateFruit, 600);
+                } else {
+                    handleWin();
+                }
+            };
             synth.speak(u);
         }
 
-        function next() {
-            if(idx < fruits.length - 1) {
-                idx++;
-                update();
+        // --- MATH ENGINE ---
+        function generateMath() {
+            gameState.mistakes = 0;
+            gameState.tapCount = 0;
+            document.getElementById('hint-btn').style.display = 'none';
+            
+            let max = gameState.level === 'easy' ? 5 : gameState.level === 'med' ? 10 : 20;
+            let ops = gameState.level === 'hard' ? ['+', '-', '*', '/'] : ['+', '-'];
+            
+            let a = Math.floor(Math.random() * max) + 1;
+            let b = Math.floor(Math.random() * max) + 1;
+            let op = ops[Math.floor(Math.random() * ops.length)];
+
+            if(op === '-' && a < b) [a, b] = [b, a];
+            if(op === '/') a = a * b;
+
+            gameState.mathObj = { a, b, op, ans: eval(`${a}${op}${b}`) };
+            
+            document.getElementById('v-op').innerText = op.replace('*','×').replace('/','÷');
+            drawVisuals('v-group1', a, fruitData[0]);
+            drawVisuals('v-group2', b, fruitData[1]);
+            document.getElementById('m-ans').value = '';
+            updateProg(gameState.idx + 1, 5);
+        }
+
+        function drawVisuals(id, count, img) {
+            const container = document.getElementById(id);
+            container.innerHTML = '';
+            for(let i=0; i<count; i++) {
+                const wrap = document.createElement('div');
+                wrap.className = 'fruit-wrapper';
+                wrap.innerHTML = `<img src="${folder}${img}.png" class="mini-fruit"><div class="count-badge"></div>`;
+                wrap.onclick = function() {
+                    gameState.tapCount++;
+                    const badge = this.querySelector('.count-badge');
+                    badge.innerText = gameState.tapCount;
+                    badge.style.opacity = 1;
+                    say(gameState.tapCount);
+                };
+                container.appendChild(wrap);
+            }
+        }
+
+        function checkMath() {
+            const val = parseInt(document.getElementById('m-ans').value);
+            if(val === gameState.mathObj.ans) {
+                const randomFruit = fruitData[Math.floor(Math.random() * fruitData.length)];
+                if(!gameState.earnedStickers.includes(randomFruit)) {
+                    showDiscovery(randomFruit);
+                    gameState.earnedStickers.push(randomFruit);
+                    localStorage.setItem('stickers', JSON.stringify(gameState.earnedStickers));
+                } else {
+                    say("Hooray! You got it right!");
+                }
+                gameState.idx++;
+                if(gameState.idx >= 5) setTimeout(handleWin, 2000);
+                else setTimeout(generateMath, 2000);
             } else {
-                startCelebration();
+                gameState.mistakes++;
+                say("Try again");
+                if(gameState.mistakes >= 1) document.getElementById('hint-btn').style.display = 'inline-block';
             }
         }
 
-        function startCelebration() {
-            document.getElementById('app-screen').style.display = 'none';
-            document.getElementById('celebration').style.display = 'flex';
-            renderConfetti();
+        // --- UTILS ---
+        function handleWin() {
+            say("Great job! You are so smart!");
+            setTimeout(goHome, 2000);
         }
 
-        // Simple Canvas Fireworks/Confetti Logic
-        function renderConfetti() {
-            const canvas = document.getElementById('confetti-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            let particles = [];
+        function giveHint() { say("The answer is " + gameState.mathObj.ans); }
 
-            for(let i=0; i<100; i++) {
-                particles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height - canvas.height,
-                    r: Math.random() * 6 + 2,
-                    d: Math.random() * 10,
-                    color: `hsl(${Math.random() * 360}, 100%, 50%)`,
-                    tilt: Math.random() * 10 - 10
-                });
-            }
-
-            function draw() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                particles.forEach(p => {
-                    ctx.beginPath();
-                    ctx.lineWidth = p.r;
-                    ctx.strokeStyle = p.color;
-                    ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
-                    ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
-                    ctx.stroke();
-                });
-                updateParticles();
-                requestAnimationFrame(draw);
-            }
-
-            function updateParticles() {
-                particles.forEach(p => {
-                    p.y += Math.cos(p.d) + 1 + p.r/2;
-                    p.x += Math.sin(p.d);
-                    if(p.y > canvas.height) {
-                        p.y = -20;
-                        p.x = Math.random() * canvas.width;
-                    }
-                });
-            }
-            draw();
+        function showDiscovery(fruit) {
+            document.getElementById('new-sticker-img').src = `${folder}${fruit}.png`;
+            document.getElementById('new-sticker-name').innerText = fruit.toUpperCase();
+            document.getElementById('discovery-overlay').style.display = 'flex';
+            say(`Awesome! You unlocked a new sticker: ${fruit}!`);
         }
 
-        window.onload = update;
+        function closeDiscovery() { document.getElementById('discovery-overlay').style.display = 'none'; }
+
+        function showStickers() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('sticker-screen').classList.add('active');
+            const grid = document.getElementById('sticker-grid');
+            grid.innerHTML = '';
+            fruitData.forEach(f => {
+                const earned = gameState.earnedStickers.includes(f);
+                grid.innerHTML += `<div class="sticker-slot"><img src="${folder}${f}.png" class="sticker-img ${earned?'sticker-earned':''}"></div>`;
+            });
+        }
+
+        function updateProg(c, t) {
+            document.getElementById('prog-bar').style.width = (c/t)*100 + '%';
+            document.getElementById('prog-label').innerText = `${c} / ${t}`;
+        }
+
+        function say(txt) {
+            synth.cancel();
+            synth.speak(new SpeechSynthesisUtterance(txt));
+        }
     </script>
 </body>
 </html>
