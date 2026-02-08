@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Learning | Colorful Fun</title>
+    <title>Toddler Learning | Big Buttons</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@700;900&display=swap');
 
         :root {
-            --bg-home: #FFDEE9; /* Pastel Pink */
-            --bg-math: #D5FFDE; /* Pastel Mint */
-            --bg-fruit: #E0E7FF; /* Pastel Blue */
-            --bg-stickers: #FEF3C7; /* Pastel Yellow */
+            --bg-home: #FFDEE9;
+            --bg-math: #D5FFDE;
+            --bg-fruit: #E0E7FF;
+            --bg-stickers: #FEF3C7;
             --apple-blue: #007AFF;
             --apple-green: #34C759;
             --radius: 32px;
@@ -20,7 +20,6 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { font-family: 'Inter', sans-serif; margin: 0; overflow: hidden; height: 100vh; transition: background 0.5s ease; }
 
-        /* Screen Backgrounds */
         #home-screen { background: var(--bg-home); }
         #math-op-screen, #difficulty-screen { background: var(--bg-math); }
         #game-screen { background: var(--bg-fruit); }
@@ -32,11 +31,16 @@
         /* Sparkle Canvas */
         #sparkle-canvas { position: fixed; top: 0; left: 0; pointer-events: none; z-index: 3000; width: 100%; height: 100%; }
 
-        .menu-container { justify-content: center; gap: 15px; overflow-y: auto; text-align: center; }
+        /* Horizontal Grid Layout */
+        .btn-grid { 
+            display: flex; flex-direction: row; flex-wrap: wrap; 
+            justify-content: center; gap: 15px; width: 100%; max-width: 600px; margin-top: 20px;
+        }
+
         .menu-btn { 
-            width: 100%; max-width: 350px; padding: 22px; border-radius: 24px; 
-            border: none; font-size: 1.6rem; font-weight: 900; color: white; cursor: pointer;
-            box-shadow: 0 6px 0 rgba(0,0,0,0.1); transition: 0.1s;
+            flex: 1 1 calc(45% - 10px); min-width: 140px; padding: 30px 15px; border-radius: 24px; 
+            border: none; font-size: 1.4rem; font-weight: 900; color: white; cursor: pointer;
+            box-shadow: 0 6px 0 rgba(0,0,0,0.1); transition: 0.1s; display: flex; align-items: center; justify-content: center; text-align: center;
         }
         .menu-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 rgba(0,0,0,0.1); }
 
@@ -56,14 +60,15 @@
 
         .footer-nav { width: 100%; display: flex; justify-content: center; padding: 15px 0; }
         .home-btn-bottom { 
-            background: white; color: #111; padding: 12px 30px; 
+            background: white; color: #111; padding: 15px 40px; 
             border-radius: 50px; font-weight: 800; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 2px solid #ddd;
-            cursor: pointer; font-size: 1.1rem;
+            cursor: pointer; font-size: 1.2rem;
         }
 
         #discovery-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9);
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95);
             z-index: 2000; flex-direction: column; align-items: center; justify-content: center; color: white;
+            text-align: center; padding: 20px;
         }
     </style>
 </head>
@@ -71,26 +76,31 @@
 
     <canvas id="sparkle-canvas"></canvas>
 
-    <div id="home-screen" class="screen active menu-container">
-        <h1 style="font-size: 2.8rem; color: #D81B60;">Kids Play! 🎨</h1>
-        <button class="menu-btn" style="background:#AF52DE" onclick="showStickers()">⭐ STICKER BOOK</button>
-        <button class="menu-btn" style="background:#FF9500" onclick="startApp('fruits')">🍎 FRUIT NAMES</button>
-        <button class="menu-btn" style="background:#007AFF" onclick="showMathOps()">➕ MATH GAMES</button>
+    <div id="home-screen" class="screen active">
+        <h1 style="font-size: 2.8rem; color: #D81B60; margin-top: 40px;">Play & Learn! 🎨</h1>
+        <div class="btn-grid">
+            <button class="menu-btn" style="background:#AF52DE; flex: 1 1 90%;" onclick="showStickers()">⭐ STICKER BOOK</button>
+            <button class="menu-btn" style="background:#FF9500" onclick="startApp('fruits')">🍎 FRUITS</button>
+            <button class="menu-btn" style="background:#007AFF" onclick="showMathOps()">➕ MATH</button>
+        </div>
     </div>
 
-    <div id="math-op-screen" class="screen menu-container">
+    <div id="math-op-screen" class="screen">
         <h1 style="color: #2E7D32;">Choose Math</h1>
-        <button class="menu-btn" style="background:#34C759" onclick="selectOp('+')">ADDITION (+)</button>
-        <button class="menu-btn" style="background:#FF3B30" onclick="selectOp('-')">SUBTRACTION (-)</button>
-        <button class="menu-btn" style="background:#AF52DE" onclick="selectOp('*')">MULTIPLICATION (×)</button>
+        <div class="btn-grid">
+            <button class="menu-btn" style="background:#34C759" onclick="selectOp('+')">ADDITION (+)</button>
+            <button class="menu-btn" style="background:#FF3B30" onclick="selectOp('-')">SUBTRACT (-)</button>
+            <button class="menu-btn" style="background:#AF52DE" onclick="selectOp('*')">TIMES (×)</button>
+        </div>
         <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
-    <div id="difficulty-screen" class="screen menu-container">
-        <h1 style="color: #2E7D32;">How Big?</h1>
-        <button class="menu-btn" style="background:#34C759" onclick="setDifficulty('easy')">SMALL (1-5)</button>
-        <button class="menu-btn" style="background:#FFCC00; color:black;" onclick="setDifficulty('med')">MEDIUM (1-10)</button>
-        <button class="menu-btn" style="background:#FF3B30" onclick="setDifficulty('hard')">BIG (1-20)</button>
+    <div id="difficulty-screen" class="screen">
+        <h1 style="color: #2E7D32;">Choose Size</h1>
+        <div class="btn-grid">
+            <button class="menu-btn" style="background:#34C759" onclick="setDifficulty('easy')">SMALL (1-5)</button>
+            <button class="menu-btn" style="background:#FFCC00; color:black;" onclick="setDifficulty('med')">MEDIUM (1-10)</button>
+        </div>
         <div class="footer-nav"><div class="home-btn-bottom" onclick="goHome()">🏠 HOME</div></div>
     </div>
 
@@ -132,7 +142,7 @@
     <div id="discovery-overlay" onclick="closeDiscovery()">
         <img id="new-sticker-img" style="width:250px; height:250px; object-fit:contain;" src="">
         <h1 id="new-sticker-name" style="color:#FFCC00; font-size: 3rem;"></h1>
-        <p>You found a new sticker!</p>
+        <p style="font-size: 1.5rem;">You found a new sticker!</p>
     </div>
 
     <script>
@@ -179,12 +189,12 @@
             setTimeout(() => {
                 state.idx++;
                 if(state.idx < fruitData.length) updateFruit();
-                else say("You learned them all! Good job!");
-            }, 1500);
+                else say("Hooray! ... You learned them all!");
+            }, 2000);
         }
 
         function generateMath() {
-            let max = state.level === 'easy' ? 5 : state.level === 'med' ? 10 : 20;
+            let max = state.level === 'easy' ? 5 : 10;
             let a = Math.floor(Math.random() * max) + 1;
             let b = Math.floor(Math.random() * max) + 1;
             if(state.op === '-' && a < b) [a, b] = [b, a];
@@ -193,7 +203,7 @@
             document.getElementById('v-num1').innerText = a;
             document.getElementById('v-num2').innerText = b;
             drawVisuals('v-group1', a, fruitData[0]);
-            drawVisuals('v-group2', b, fruitData[1]);
+            drawVisuals('v-group2', b, fruitData[Math.min(1, fruitData.length-1)]);
             document.getElementById('m-ans').value = '';
             document.getElementById('prog-label').innerText = `${state.idx+1}/5`;
         }
@@ -207,25 +217,30 @@
         function checkMath() {
             if(parseInt(document.getElementById('m-ans').value) === state.ans) {
                 triggerSparkles();
-                say("Hooray! You got it right! Next one!");
+                say("Hooray! ... You got it right! ... Now let's try the next one!");
+                
                 const f = fruitData[Math.floor(Math.random() * fruitData.length)];
                 if(!state.stickers.includes(f)) {
                     state.stickers.push(f);
                     localStorage.setItem('stickers', JSON.stringify(state.stickers));
-                    setTimeout(() => showDiscovery(f), 1000);
+                    setTimeout(() => showDiscovery(f), 2000);
                 }
+                
                 state.idx++;
-                if(state.idx >= 5) setTimeout(goHome, 3000);
-                else setTimeout(generateMath, 2000);
-            } else { say("Try again!"); }
+                if(state.idx >= 5) {
+                    setTimeout(() => { say("Wow! ... You are a math star!"); setTimeout(goHome, 3000); }, 3000);
+                } else {
+                    setTimeout(generateMath, 4500);
+                }
+            } else { say("Try again! ... You can do it!"); }
         }
 
         function triggerSparkles() {
-            for(let i=0; i<30; i++) {
+            for(let i=0; i<50; i++) {
                 particles.push({
                     x: canvas.width/2, y: canvas.height/2,
-                    vx: (Math.random()-0.5)*10, vy: (Math.random()-0.5)*10,
-                    size: Math.random()*10+5, color: `hsl(${Math.random()*360}, 80%, 60%)`, life: 1
+                    vx: (Math.random()-0.5)*15, vy: (Math.random()-0.5)*15,
+                    size: Math.random()*12+5, color: `hsl(${Math.random()*360}, 80%, 60%)`, life: 1
                 });
             }
         }
@@ -233,9 +248,8 @@
         function animateSparkles() {
             ctx.clearRect(0,0,canvas.width,canvas.height);
             particles.forEach((p,i) => {
-                p.x += p.vx; p.y += p.vy; p.life -= 0.02;
-                ctx.fillStyle = p.color;
-                ctx.globalAlpha = p.life;
+                p.x += p.vx; p.y += p.vy; p.life -= 0.015;
+                ctx.fillStyle = p.color; ctx.globalAlpha = p.life;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
                 if(p.life <= 0) particles.splice(i,1);
             });
@@ -256,13 +270,19 @@
             grid.innerHTML = '';
             fruitData.forEach(f => {
                 const earned = state.stickers.includes(f);
-                grid.innerHTML += `<div style="background:white; border-radius:15px; height:100px; display:flex; align-items:center; justify-content:center;">
+                grid.innerHTML += `<div style="background:white; border-radius:15px; height:100px; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
                     <img src="${folder}${f}.png" style="width:70%; opacity:${earned?1:0.1}; filter:grayscale(${earned?0:1})">
                 </div>`;
             });
         }
 
-        function say(t) { synth.cancel(); const u = new SpeechSynthesisUtterance(t); u.pitch = 1.3; synth.speak(u); }
+        function say(t) { 
+            synth.cancel(); 
+            const u = new SpeechSynthesisUtterance(t); 
+            u.rate = 0.7; // Patient, slow pace
+            u.pitch = 1.3; // Happy tone
+            synth.speak(u); 
+        }
     </script>
 </body>
 </html>
