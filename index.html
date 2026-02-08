@@ -1,275 +1,254 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2022.7">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
-    span.s1 {font: 12.0px 'Apple Color Emoji'}
-    span.s2 {font: 12.0px 'Tamil Sangam MN'}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Toddler Tamil & Slokas</title>
+    <style>
+        :root {
+            --primary-bg: #FFEB3B;
+            --sloka-bg: #FF9800;
+            --tamil-bg: #4CAF50;
+            --text-color: #212121;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            margin: 0;
+            background-color: var(--primary-bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            -webkit-touch-callout: none; /* Prevents long-press menus for toddlers */
+            -webkit-user-select: none;
+        }
+
+        /* Large Tap-Friendly Buttons */
+        .btn {
+            padding: 30px 50px;
+            font-size: 2rem;
+            border-radius: 25px;
+            border: 4px solid #000;
+            cursor: pointer;
+            background: white;
+            margin: 20px;
+            font-weight: bold;
+            box-shadow: 0 10px 0 #000;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 2px 0 #000;
+        }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
+
+        .active { display: flex; }
+
+        .progress-container {
+            width: 90%;
+            background-color: #fff;
+            border: 3px solid #000;
+            border-radius: 25px;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 25px;
+            background-color: #2196F3;
+            border-radius: 20px;
+            transition: width 0.4s ease;
+        }
+
+        .word-card {
+            background: white;
+            padding: 20px;
+            border-radius: 40px;
+            border: 5px solid #000;
+            width: 80%;
+            max-width: 400px;
+        }
+
+        .word-img { width: 200px; height: 200px; object-fit: contain; }
+
+        .play-btn {
+            background-color: #f44336;
+            color: white;
+            font-size: 4rem;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid #000;
+            margin: 10px;
+        }
+
+        .next-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .sloka-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .sloka-item {
+            background: #fff;
+            padding: 10px;
+            border: 3px solid #000;
+            border-radius: 20px;
+        }
+
+        .sloka-item img { width: 100px; height: 100px; border-radius: 50%; }
+    </style>
 </head>
 <body>
-<p class="p1">&lt;!DOCTYPE html&gt;</p>
-<p class="p1">&lt;html lang="en"&gt;</p>
-<p class="p1">&lt;head&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta charset="UTF-8"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;title&gt;Toddler Learning App&lt;/title&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;style&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>:root {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--primary-bg: #FFEB3B;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--sloka-bg: #FF9800;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--tamil-bg: #4CAF50;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--text-color: #212121;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>--button-text: #FFFFFF;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>body {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-family: 'Comic Sans MS', cursive, sans-serif;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: var(--primary-bg);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: var(--text-color);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: flex;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100vh;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>overflow: hidden;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Large Tap-Friendly Buttons */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 30px 50px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 2rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 8px #999;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: 0.2s;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-weight: bold;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.btn:active {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 4px #666;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transform: translateY(4px);</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.screen {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: none;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>flex-direction: column;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>align-items: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>justify-content: center;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>text-align: center;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.active { display: flex; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Progress Bar */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.progress-container {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 80%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #ddd;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 25px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-top: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.progress-bar {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 0%;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #2196F3;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 25px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>transition: width 0.5s;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Tamil Learning Elements */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.word-card {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 40px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>box-shadow: 0 10px 20px rgba(0,0,0,0.2);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.word-img { width: 250px; height: 250px; object-fit: contain; }</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.play-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #f44336;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>color: white;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 3rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>width: 100px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>height: 100px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 50%;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.next-btn {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>position: absolute;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>bottom: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>right: 30px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background-color: #2196F3;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Dropdown Style */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>select {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>font-size: 1.5rem;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>margin-bottom: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>/* Sloka Grid */</p>
-<p class="p1"><span class="Apple-converted-space">        </span>.sloka-grid {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>display: grid;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>grid-template-columns: repeat(2, 1fr);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>gap: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 20px;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.sloka-item {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>background: #fff;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>padding: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>border-radius: 15px;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>cursor: pointer;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>.sloka-item img { width: 120px; height: 120px; border-radius: 50%; }</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>#video-container { display: none; }</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/style&gt;</p>
-<p class="p1">&lt;/head&gt;</p>
-<p class="p1">&lt;body&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="home-screen" class="screen active"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h1&gt;Hi Little One! <span class="s1">👋</span>&lt;/h1&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" style="background-color: var(--sloka-bg);" onclick="showScreen('sloka-screen')"&gt;Slokas <span class="s1">🕉️</span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" style="background-color: var(--tamil-bg);" onclick="showScreen('tamil-category-screen')"&gt;Learn Tamil <span class="s1">🍎</span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="sloka-screen" class="screen"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Pick a Sloka&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="sloka-grid"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="sloka-item" onclick="playSloka('G8G8WwGX0Qc', 54)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;img src="https://img.freepik.com/free-vector/lord-ganesha-illustration_23-2148600123.jpg" alt="Ganesha"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Ganesha Sloka&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;div class="sloka-item" onclick="playSloka('G8G8WwGX0Qc', 102)"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;img src="https://img.freepik.com/free-vector/saraswati-illustration_23-2148596644.jpg" alt="Saraswati"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>&lt;p&gt;Saraswati Sloka&lt;/p&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" onclick="showScreen('home-screen')"&gt;Back&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="sloka-player" class="screen"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div id="player"&gt;&lt;/div&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" onclick="showScreen('sloka-screen')"&gt;Finish &amp; Play More&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="tamil-category-screen" class="screen"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;h2&gt;Choose a Category&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;select id="category-select"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="fruits"&gt;Fruits (<span class="s2">பழங்கள்</span>)&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;option value="animals"&gt;Animals (<span class="s2">விலங்குகள்</span>)&lt;/option&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/select&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" style="background-color: var(--tamil-bg);" onclick="startTamil()"&gt;Start Learning&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn" onclick="showScreen('home-screen')"&gt;Back&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="tamil-screen" class="screen"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="progress-container"&gt;&lt;div id="progress-bar" class="progress-bar"&gt;&lt;/div&gt;&lt;/div&gt;</p>
-<p class="p2"><span class="Apple-converted-space">        </span></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;div class="word-card"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;img id="tamil-img" src="" class="word-img"&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="eng-word" style="color: blue;"&gt;&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;button class="play-btn" onclick="speakTamil()"&gt;<span class="s1">▶️</span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>&lt;h2 id="tam-word" style="color: green;"&gt;&lt;/h2&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>&lt;button class="btn next-btn" onclick="nextWord()"&gt;Next <span class="s1">➡️</span>&lt;/button&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/div&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;audio id="success-sound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"&gt;&lt;/audio&gt;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script src="https://www.youtube.com/iframe_api"&gt;&lt;/script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;script&gt;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let player;</p>
-<p class="p1"><span class="Apple-converted-space">        </span>const tamilData = {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>fruits: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ eng: "Apple", tam: "Appil", display: "<span class="s2">ஆப்பிள்</span>", img: "https://cdn-icons-png.flaticon.com/512/415/415733.png" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ eng: "Mango", tam: "Maampalam", display: "<span class="s2">மாம்பழம்</span>", img: "https://cdn-icons-png.flaticon.com/512/2909/2909787.png" }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>],</p>
-<p class="p1"><span class="Apple-converted-space">            </span>animals: [</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ eng: "Lion", tam: "Singam", display: "<span class="s2">சிங்கம்</span>", img: "https://cdn-icons-png.flaticon.com/512/616/616412.png" },</p>
-<p class="p1"><span class="Apple-converted-space">                </span>{ eng: "Elephant", tam: "Yaanai", display: "<span class="s2">யானை</span>", img: "https://cdn-icons-png.flaticon.com/512/375/375125.png" }</p>
-<p class="p1"><span class="Apple-converted-space">            </span>]</p>
-<p class="p1"><span class="Apple-converted-space">        </span>};</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentCategory = [];</p>
-<p class="p1"><span class="Apple-converted-space">        </span>let currentIndex = 0;</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function showScreen(id) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.querySelectorAll('.screen').forEach(s =&gt; s.classList.remove('active'));</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById(id).classList.add('active');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if(player) player.stopVideo();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function playSloka(videoId, startTime) {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showScreen('sloka-player');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (player) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>player.loadVideoById({'videoId': videoId, 'startSeconds': startTime});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>player = new YT.Player('player', {</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>height: '360', width: '640', videoId: videoId,</p>
-<p class="p1"><span class="Apple-converted-space">                    </span>playerVars: { 'start': startTime, 'autoplay': 1 }</p>
-<p class="p1"><span class="Apple-converted-space">                </span>});</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function startTamil() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const cat = document.getElementById('category-select').value;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentCategory = tamilData[cat];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>currentIndex = 0;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>showScreen('tamil-screen');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>updateTamilCard();</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function updateTamilCard() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const item = currentCategory[currentIndex];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('tamil-img').src = item.img;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('eng-word').innerText = item.eng;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('tam-word').innerText = item.display;</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>let progress = ((currentIndex) / currentCategory.length) * 100;</p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('progress-bar').style.width = progress + "%";</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function speakTamil() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const item = currentCategory[currentIndex];</p>
-<p class="p1"><span class="Apple-converted-space">            </span>const msg = new SpeechSynthesisUtterance(item.display);</p>
-<p class="p1"><span class="Apple-converted-space">            </span>msg.lang = 'ta-IN';</p>
-<p class="p1"><span class="Apple-converted-space">            </span>msg.rate = 0.7; // Slow for kids</p>
-<p class="p1"><span class="Apple-converted-space">            </span>window.speechSynthesis.speak(msg);</p>
-<p class="p2"><span class="Apple-converted-space">            </span></p>
-<p class="p1"><span class="Apple-converted-space">            </span>document.getElementById('success-sound').play();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>// Star animation logic could go here</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p2"><br></p>
-<p class="p1"><span class="Apple-converted-space">        </span>function nextWord() {</p>
-<p class="p1"><span class="Apple-converted-space">            </span>if (currentIndex &lt; currentCategory.length - 1) {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>currentIndex++;</p>
-<p class="p1"><span class="Apple-converted-space">                </span>updateTamilCard();</p>
-<p class="p1"><span class="Apple-converted-space">            </span>} else {</p>
-<p class="p1"><span class="Apple-converted-space">                </span>alert("Great job! You finished the category!");</p>
-<p class="p1"><span class="Apple-converted-space">                </span>showScreen('tamil-category-screen');</p>
-<p class="p1"><span class="Apple-converted-space">            </span>}</p>
-<p class="p1"><span class="Apple-converted-space">        </span>}</p>
-<p class="p1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</p>
-<p class="p1">&lt;/body&gt;</p>
-<p class="p1">&lt;/html&gt;</p>
+
+    <div id="home-screen" class="screen active">
+        <h1 style="font-size: 3rem;">Vanakkam! 🙏</h1>
+        <button class="btn" style="background-color: var(--sloka-bg);" onclick="showScreen('sloka-screen')">Slokas 🕉️</button>
+        <button class="btn" style="background-color: var(--tamil-bg);" onclick="showScreen('tamil-category-screen')">Tamil 🍎</button>
+    </div>
+
+    <div id="sloka-screen" class="screen">
+        <h2>Choose a Sloka</h2>
+        <div class="sloka-grid">
+            <div class="sloka-item" onclick="playSloka('G8G8WwGX0Qc', 54)">
+                <img src="https://img.freepik.com/free-vector/lord-ganesha-illustration_23-2148600123.jpg">
+                <p>Ganesha</p>
+            </div>
+            <div class="sloka-item" onclick="playSloka('G8G8WwGX0Qc', 102)">
+                <img src="https://img.freepik.com/free-vector/saraswati-illustration_23-2148596644.jpg">
+                <p>Saraswati</p>
+            </div>
+        </div>
+        <button class="btn" onclick="showScreen('home-screen')">🏠 Home</button>
+    </div>
+
+    <div id="sloka-player" class="screen">
+        <div id="player"></div>
+        <br>
+        <button class="btn" onclick="stopAndBack()">🔙 Back to List</button>
+    </div>
+
+    <div id="tamil-category-screen" class="screen">
+        <h2>Pick a Category</h2>
+        <select id="category-select" style="font-size: 1.5rem; padding: 10px; border-radius: 10px;">
+            <option value="fruits">Fruits (பழங்கள்)</option>
+            <option value="animals">Animals (விலங்குகள்)</option>
+        </select>
+        <button class="btn" onclick="startTamil()">Go! ▶️</button>
+        <button class="btn" onclick="showScreen('home-screen')">🏠 Home</button>
+    </div>
+
+    <div id="tamil-screen" class="screen">
+        <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
+        <div class="word-card">
+            <img id="tamil-img" src="" class="word-img">
+            <h1 id="eng-word" style="color: #1976D2; margin: 5px;"></h1>
+            <button class="play-btn" onclick="speakTamil()">🔊</button>
+            <h1 id="tam-word" style="color: #388E3C; margin: 5px;"></h1>
+        </div>
+        <button class="btn next-btn" onclick="nextWord()">Next ➡️</button>
+    </div>
+
+    <audio id="success-sound" src="https://www.soundjay.com/buttons/sounds/button-37.mp3"></audio>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        const tamilData = {
+            fruits: [
+                { eng: "Apple", display: "ஆப்பிள்", img: "https://cdn-icons-png.flaticon.com/512/415/415733.png" },
+                { eng: "Mango", display: "மாம்பழம்", img: "https://cdn-icons-png.flaticon.com/512/2909/2909787.png" },
+                { eng: "Banana", display: "வாழைப்பழம்", img: "https://cdn-icons-png.flaticon.com/512/2909/2909808.png" }
+            ],
+            animals: [
+                { eng: "Lion", display: "சிங்கம்", img: "https://cdn-icons-png.flaticon.com/512/616/616412.png" },
+                { eng: "Elephant", display: "யானை", img: "https://cdn-icons-png.flaticon.com/512/375/375125.png" }
+            ]
+        };
+
+        let currentCategory = [];
+        let currentIndex = 0;
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            if(player && id !== 'sloka-player') player.pauseVideo();
+        }
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '250',
+                width: '100%',
+                videoId: 'G8G8WwGX0Qc',
+                playerVars: { 'autoplay': 0, 'controls': 1 }
+            });
+        }
+
+        function playSloka(videoId, startTime) {
+            showScreen('sloka-player');
+            player.seekTo(startTime);
+            player.playVideo();
+        }
+
+        function stopAndBack() {
+            player.pauseVideo();
+            showScreen('sloka-screen');
+        }
+
+        function startTamil() {
+            const cat = document.getElementById('category-select').value;
+            currentCategory = tamilData[cat];
+            currentIndex = 0;
+            showScreen('tamil-screen');
+            updateTamilCard();
+        }
+
+        function updateTamilCard() {
+            const item = currentCategory[currentIndex];
+            document.getElementById('tamil-img').src = item.img;
+            document.getElementById('eng-word').innerText = item.eng;
+            document.getElementById('tam-word').innerText = item.display;
+            document.getElementById('progress-bar').style.width = ((currentIndex + 1) / currentCategory.length * 100) + "%";
+        }
+
+        function speakTamil() {
+            const item = currentCategory[currentIndex];
+            const msg = new SpeechSynthesisUtterance(item.display);
+            msg.lang = 'ta-IN';
+            msg.rate = 0.6; 
+            window.speechSynthesis.speak(msg);
+            document.getElementById('success-sound').play().catch(() => {});
+        }
+
+        function nextWord() {
+            if (currentIndex < currentCategory.length - 1) {
+                currentIndex++;
+                updateTamilCard();
+            } else {
+                alert("Super! You did it! 🎉");
+                showScreen('tamil-category-screen');
+            }
+        }
+    </script>
 </body>
 </html>
