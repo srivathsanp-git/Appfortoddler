@@ -1,312 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ta">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Toddler Learning App</title>
+    <title>Learn Tamil | Premium Edition</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23007AFF'/><circle cx='50' cy='50' r='20' fill='white'/></svg>">
+    
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+
         :root {
-            --primary-bg: #FFEB3B;
-            --sloka-bg: #FF9800;
-            --tamil-bg: #4CAF50;
-            --text-color: #212121;
+            --ios-bg: #F2F2F7;
+            --nike-black: #111111;
+            --apple-blue: #007AFF;
+            --success-green: #34C759;
+            --card-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            --radius: 32px;
         }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
             margin: 0;
-            background-color: var(--primary-bg);
+            background-color: var(--ios-bg);
+            color: var(--nike-black);
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            height: 100vh;
             overflow: hidden;
-            color: var(--text-color);
         }
 
-        /* Nav Links */
-        .home-link {
+        /* Parental Gate Overlay */
+        #parental-gate {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .gate-btn {
+            background: var(--apple-blue);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
             font-size: 1.2rem;
-            margin: 15px 0;
-            text-decoration: underline;
-            cursor: pointer;
-            font-weight: bold;
-            color: #d32f2f;
-        }
-
-        /* Large Buttons */
-        .btn {
-            padding: 20px 40px;
-            font-size: 1.8rem;
-            border-radius: 20px;
-            border: 4px solid #000;
-            cursor: pointer;
-            background: white;
+            font-weight: 700;
             margin: 10px;
-            font-weight: bold;
-            box-shadow: 0 8px 0 #000;
-            transition: 0.1s;
         }
 
-        .btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 4px 0 #000;
-        }
-
+        /* Screens */
         .screen {
             display: none;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
             width: 100%;
             height: 100%;
-            text-align: center;
-            padding: 10px;
-            box-sizing: border-box;
+            padding: 20px;
+            animation: fadeIn 0.4s ease-out;
         }
-
         .active { display: flex; }
 
-        /* Progress Bar */
-        .progress-container {
-            width: 80%;
-            background-color: #fff;
-            border: 3px solid #000;
-            border-radius: 25px;
-            margin-bottom: 15px;
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-weight: 900; font-size: 2.5rem; letter-spacing: -1px; margin-bottom: 5px; text-transform: uppercase; }
+        p { color: #8E8E93; font-weight: 500; margin-top: 0; }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
         }
 
-        .progress-bar {
-            width: 0%;
-            height: 20px;
-            background-color: #2196F3;
-            border-radius: 20px;
-            transition: width 0.3s;
-        }
-
-        /* Learning Card */
-        .word-card {
+        .cat-card {
             background: white;
-            padding: 20px;
-            border-radius: 30px;
-            border: 5px solid #000;
-            width: 90%;
+            padding: 30px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--card-shadow);
+            text-align: center;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .cat-card:active { transform: scale(0.92); }
+
+        .main-card {
+            background: white;
+            width: 100%;
             max-width: 450px;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            margin-bottom: 100px;
         }
 
-        .word-img { width: 180px; height: 180px; object-fit: contain; margin-bottom: 10px; }
-        
-        /* Green Horizontal Play Button */
-        .play-btn-green {
-            background-color: #4CAF50;
+        .img-container { width: 100%; height: 55%; overflow: hidden; }
+        .main-img { width: 100%; height: 100%; object-fit: cover; }
+
+        .content {
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            flex-grow: 1;
+        }
+
+        .tam-txt { font-size: 2.8rem; font-weight: 900; margin: 10px 0; }
+
+        .play-bar {
+            background: var(--success-green);
             color: white;
-            font-size: 1.5rem;
-            width: 250px;
-            padding: 15px;
-            border-radius: 50px;
-            border: 4px solid #000;
-            margin: 15px 0;
+            padding: 20px;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
+            font-size: 1.4rem;
+            font-weight: 800;
             cursor: pointer;
-            font-weight: bold;
         }
 
         .next-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #2196F3;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--nike-black);
             color: white;
+            padding: 20px 60px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            width: 90%;
+            max-width: 400px;
+            border: none;
         }
 
-        .sloka-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+        .nav-header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; }
+        .home-icon { background: white; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; }
 
-        #player { border: 5px solid #000; border-radius: 20px; background: #000; }
+        .progress-dots { display: flex; gap: 6px; }
+        .dot { width: 8px; height: 8px; border-radius: 50%; background: #D1D1D6; }
+        .dot.active { background: var(--apple-blue); width: 20px; border-radius: 10px; }
+
+        #celebration { display: none; position: fixed; inset: 0; background: white; z-index: 1000; justify-content: center; align-items: center; flex-direction: column; }
     </style>
 </head>
 <body>
 
+    <div id="parental-gate">
+        <h2>Parental Check</h2>
+        <p id="gate-question"></p>
+        <div id="gate-options"></div>
+        <button class="gate-btn" style="background: #8E8E93;" onclick="closeGate()">Cancel</button>
+    </div>
+
     <div id="home-screen" class="screen active">
-        <h1 style="font-size: 2.5rem;">Vannakam! 🎈</h1>
-        <button class="btn" style="background-color: var(--sloka-bg);" onclick="showScreen('sloka-screen')">Slokas 🕉️</button>
-        <button class="btn" style="background-color: var(--tamil-bg);" onclick="showScreen('tamil-category-screen')">Learn Tamil 🍎</button>
-    </div>
-
-    <div id="sloka-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
-        <h2>Pick a Sloka</h2>
-        <div class="sloka-grid">
-            <div onclick="playSloka('G8G8WwGX0Qc', 54)">
-                <img src="https://cdn-icons-png.flaticon.com/512/2334/2334465.png" width="120"><br><strong>Ganesha</strong>
-            </div>
-            <div onclick="playSloka('G8G8WwGX0Qc', 102)">
-                <img src="https://cdn-icons-png.flaticon.com/512/3362/3362153.png" width="120"><br><strong>Saraswati</strong>
-            </div>
+        <div style="text-align: left; width: 100%; max-width: 500px; margin-top: 40px;">
+            <p>LEARN TAMIL</p>
+            <h1>Pick your<br>Category</h1>
+        </div>
+        <div class="category-grid">
+            <div class="cat-card" onclick="startApp('fruits')">🍎<br>Fruits</div>
+            <div class="cat-card" onclick="startApp('animals')">🦁<br>Animals</div>
+            <div class="cat-card" onclick="startApp('colors')">🎨<br>Colors</div>
+            <div class="cat-card" onclick="startApp('vehicles')">🚀<br>Vehicles</div>
         </div>
     </div>
 
-    <div id="sloka-player-screen" class="screen">
-        <div class="home-link" onclick="stopVideoAndHome()">🏠 Home</div>
-        <div id="player"></div>
-        <button class="btn" onclick="showScreen('sloka-screen')">Back to Slokas</button>
-    </div>
-
-    <div id="tamil-category-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
-        <h2>Pick a Category</h2>
-        <select id="category-select" style="font-size: 1.5rem; padding: 15px; border-radius: 15px; margin: 20px;">
-            <option value="fruits">Fruits (பழங்கள்)</option>
-            <option value="animals">Animals (விலங்குகள்)</option>
-        </select>
-        <button class="btn" style="background-color: var(--tamil-bg);" onclick="startTamil()">Go! ▶️</button>
-    </div>
-
-    <div id="tamil-screen" class="screen">
-        <div class="home-link" onclick="showScreen('home-screen')">🏠 Home</div>
-        <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
-        
-        <div class="word-card">
-            <img id="tamil-img" src="" class="word-img">
-            <h2 id="eng-word" style="color: #1565C0; margin: 5px; font-size: 2rem;"></h2>
-            
-            <div id="speech-btn" class="play-btn-green" onclick="toggleSpeech()">
-                <span id="btn-icon">▶️</span> <span id="btn-text">Play Tamil</span>
-            </div>
-
-            <h2 id="tam-word" style="color: #2E7D32; margin: 5px; font-size: 2.2rem;"></h2>
+    <div id="app-screen" class="screen">
+        <div class="nav-header">
+            <div class="home-icon" onclick="openGate()">🏠</div>
+            <div class="progress-dots" id="dots"></div>
+            <div style="width: 44px;"></div>
         </div>
-
-        <button class="btn next-btn" onclick="nextWord()">Next ➡️</button>
+        <div class="main-card">
+            <div class="img-container"><img id="main-img" src="" class="main-img"></div>
+            <div class="content">
+                <div class="eng-txt" id="eng-txt"></div>
+                <div class="tam-txt" id="tam-txt"></div>
+                <div class="play-bar" id="play-btn" onclick="toggleVoice()">
+                    <span id="p-icon">▶</span> <span id="p-label">LISTEN</span>
+                </div>
+            </div>
+        </div>
+        <button class="next-btn" onclick="nextWord()">CONTINUE</button>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <div id="celebration">
+        <h1 style="font-size: 4rem;">🏆</h1>
+        <h1>Excellent!</h1>
+        <button class="next-btn" style="position: static;" onclick="location.reload()">PLAY AGAIN</button>
+    </div>
+
     <script>
-        let player;
-        let synth = window.speechSynthesis;
-        
-        // Comprehensive word list (10 each)
-        const tamilData = {
+        const synth = window.speechSynthesis;
+        const data = {
             fruits: [
-                { eng: "Apple", display: "ஆப்பிள்", img: "https://cdn-icons-png.flaticon.com/512/415/415733.png" },
-                { eng: "Mango", display: "மாம்பழம்", img: "https://cdn-icons-png.flaticon.com/512/2909/2909787.png" },
-                { eng: "Banana", display: "வாழைப்பழம்", img: "https://cdn-icons-png.flaticon.com/512/2909/2909808.png" },
-                { eng: "Grapes", display: "திராட்சை", img: "https://cdn-icons-png.flaticon.com/512/2909/2909761.png" },
-                { eng: "Orange", display: "ஆரஞ்சு", img: "https://cdn-icons-png.flaticon.com/512/2909/2909841.png" },
-                { eng: "Pineapple", display: "அன்னாசி", img: "https://cdn-icons-png.flaticon.com/512/2909/2909893.png" },
-                { eng: "Watermelon", display: "தர்பூசணி", img: "https://cdn-icons-png.flaticon.com/512/2909/2909756.png" },
-                { eng: "Papaya", display: "பப்பாளி", img: "https://cdn-icons-png.flaticon.com/512/2909/2909817.png" },
-                { eng: "Pomegranate", display: "மாதுளை", img: "https://cdn-icons-png.flaticon.com/512/2909/2909852.png" },
-                { eng: "Guava", display: "கொய்யா", img: "https://cdn-icons-png.flaticon.com/512/2909/2909772.png" }
+                {e:"Apple", t:"ஆப்பிள்", i:"https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=600"},
+                {e:"Mango", t:"மாம்பழம்", i:"https://images.unsplash.com/photo-1553279768-865429fa0078?w=600"},
+                {e:"Banana", t:"வாழைப்பழம்", i:"https://images.unsplash.com/photo-1571771894821-ad990241274d?w=600"},
+                {e:"Grapes", t:"திராட்சை", i:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600"},
+                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600"},
+                {e:"Pineapple", t:"அன்னாசி", i:"https://images.unsplash.com/photo-1550258114-68bd299738ad?w=600"},
+                {e:"Watermelon", t:"தர்பூசணி", i:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600"},
+                {e:"Papaya", t:"பப்பாளி", i:"https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=600"},
+                {e:"Pomegranate", t:"மாதுளை", i:"https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=600"},
+                {e:"Guava", t:"கொய்யா", i:"https://images.unsplash.com/photo-1536511132770-e51086659795?w=600"}
             ],
             animals: [
-                { eng: "Lion", display: "சிங்கம்", img: "https://cdn-icons-png.flaticon.com/512/616/616412.png" },
-                { eng: "Elephant", display: "யானை", img: "https://cdn-icons-png.flaticon.com/512/375/375125.png" },
-                { eng: "Tiger", display: "புலி", img: "https://cdn-icons-png.flaticon.com/512/616/616440.png" },
-                { eng: "Cow", display: "பசு", img: "https://cdn-icons-png.flaticon.com/512/1998/1998610.png" },
-                { eng: "Dog", display: "நாய்", img: "https://cdn-icons-png.flaticon.com/512/616/616408.png" },
-                { eng: "Cat", display: "பூனை", img: "https://cdn-icons-png.flaticon.com/512/616/616430.png" },
-                { eng: "Horse", display: "குதிரை", img: "https://cdn-icons-png.flaticon.com/512/1998/1998682.png" },
-                { eng: "Monkey", display: "குரங்கு", img: "https://cdn-icons-png.flaticon.com/512/616/616421.png" },
-                { eng: "Rabbit", display: "முயல்", img: "https://cdn-icons-png.flaticon.com/512/616/616444.png" },
-                { eng: "Deer", display: "மான்", img: "https://cdn-icons-png.flaticon.com/512/1998/1998592.png" }
+                {e:"Lion", t:"சிங்கம்", i:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600"},
+                {e:"Elephant", t:"யானை", i:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600"},
+                {e:"Tiger", t:"புலி", i:"https://images.unsplash.com/photo-1508817628294-5a453fa0b8fb?w=600"},
+                {e:"Cow", t:"பசு", i:"https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=600"},
+                {e:"Dog", t:"நாய்", i:"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600"},
+                {e:"Cat", t:"பூனை", i:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600"},
+                {e:"Horse", t:"குதிரை", i:"https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600"},
+                {e:"Monkey", t:"குரங்கு", i:"https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=600"},
+                {e:"Rabbit", t:"முயல்", i:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600"},
+                {e:"Deer", t:"மான்", i:"https://images.unsplash.com/photo-1484406566174-9da000fd267c?w=600"}
+            ],
+            colors: [
+                {e:"Red", t:"சிவப்பு", i:"https://images.unsplash.com/photo-1532007271951-c487760934ae?w=600"},
+                {e:"Blue", t:"நீலம்", i:"https://images.unsplash.com/photo-1542385151-efd9000785a0?w=600"},
+                {e:"Green", t:"பச்சை", i:"https://images.unsplash.com/photo-1543163367-c61234959b92?w=600"},
+                {e:"Yellow", t:"மஞ்சள்", i:"https://images.unsplash.com/photo-1564344756631-417321f7c9d7?w=600"},
+                {e:"White", t:"வெள்ளை", i:"https://images.unsplash.com/photo-1464306311913-e074e402802d?w=600"},
+                {e:"Black", t:"கருப்பு", i:"https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600"},
+                {e:"Pink", t:"இளம் சிவப்பு", i:"https://images.unsplash.com/photo-1518131331773-4475459359a3?w=600"},
+                {e:"Purple", t:"ஊதா", i:"https://images.unsplash.com/photo-1528459105426-b923161e389b?w=600"},
+                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1512411963231-893ec52882a1?w=600"},
+                {e:"Brown", t:"பழுப்பு", i:"https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600"}
+            ],
+            vehicles: [
+                {e:"Car", t:"கார்", i:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600"},
+                {e:"Bus", t:"பேருந்து", i:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600"},
+                {e:"Train", t:"இரயில்", i:"https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600"},
+                {e:"Aeroplane", t:"விமானம்", i:"https://images.unsplash.com/photo-1436491865332-7a61a109c7d3?w=600"},
+                {e:"Bicycle", t:"மிதிவண்டி", i:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600"},
+                {e:"Ship", t:"கப்பல்", i:"https://images.unsplash.com/photo-1544161513-0179fe746fd5?w=600"},
+                {e:"Tractor", t:"டிராக்டர்", i:"https://images.unsplash.com/photo-1530268577103-604719266399?w=600"},
+                {e:"Ambulance", t:"ஆம்புலன்ஸ்", i:"https://images.unsplash.com/photo-1516733725897-1aa73b87c8e8?w=600"},
+                {e:"Helicopter", t:"ஹெலிகாப்டர்", i:"https://images.unsplash.com/photo-1559063264-7f15be0a05a0?w=600"},
+                {e:"Auto", t:"ஆட்டோ", i:"https://images.unsplash.com/photo-1561113054-d6f7f2b1c8a1?w=600"}
             ]
         };
 
-        let currentCategory = [];
-        let currentIndex = 0;
+        let currentSet = [];
+        let index = 0;
 
-        function showScreen(id) {
-            synth.cancel();
-            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            resetSpeechButton();
+        function openGate() {
+            const num1 = Math.floor(Math.random() * 5) + 1;
+            const num2 = Math.floor(Math.random() * 5) + 1;
+            const correct = num1 + num2;
+            document.getElementById('gate-question').innerText = `What is ${num1} + ${num2}?`;
+            const options = document.getElementById('gate-options');
+            options.innerHTML = '';
+            
+            [correct, correct + 1, correct - 1].sort(() => Math.random() - 0.5).forEach(opt => {
+                const b = document.createElement('button');
+                b.className = 'gate-btn';
+                b.innerText = opt;
+                b.onclick = () => opt === correct ? location.reload() : alert('Try again, Parent!');
+                options.appendChild(b);
+            });
+            document.getElementById('parental-gate').style.display = 'flex';
         }
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', { height: '240', width: '320', videoId: 'G8G8WwGX0Qc' });
+        function closeGate() { document.getElementById('parental-gate').style.display = 'none'; }
+
+        function startApp(cat) {
+            currentSet = data[cat];
+            index = 0;
+            document.getElementById('home-screen').classList.remove('active');
+            document.getElementById('app-screen').classList.add('active');
+            const dots = document.getElementById('dots');
+            dots.innerHTML = '';
+            currentSet.forEach(() => {
+                const d = document.createElement('div');
+                d.className = 'dot';
+                dots.appendChild(d);
+            });
+            updateCard();
         }
 
-        function playSloka(vid, time) {
-            showScreen('sloka-player-screen');
-            player.loadVideoById({videoId: vid, startSeconds: time});
+        function updateCard() {
+            const item = currentSet[index];
+            document.getElementById('main-img').src = item.i;
+            document.getElementById('eng-txt').innerText = item.e;
+            document.getElementById('tam-txt').innerText = item.t;
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((d, i) => d.className = i === index ? 'dot active' : 'dot');
+            resetBtn();
         }
 
-        function stopVideoAndHome() {
-            player.stopVideo();
-            showScreen('home-screen');
-        }
-
-        function startTamil() {
-            currentCategory = tamilData[document.getElementById('category-select').value];
-            currentIndex = 0;
-            showScreen('tamil-screen');
-            updateTamilCard();
-        }
-
-        function updateTamilCard() {
-            const item = currentCategory[currentIndex];
-            document.getElementById('tamil-img').src = item.img;
-            document.getElementById('eng-word').innerText = item.eng;
-            document.getElementById('tam-word').innerText = item.display;
-            document.getElementById('progress-bar').style.width = ((currentIndex + 1) * 10) + "%";
-            resetSpeechButton();
-        }
-
-        function toggleSpeech() {
-            if (synth.speaking) {
+        function toggleVoice() {
+            if(synth.speaking) {
                 synth.cancel();
-                resetSpeechButton();
+                resetBtn();
             } else {
-                const text = currentCategory[currentIndex].display;
-                const utterance = new SpeechSynthesisUtterance(text);
-                
-                // Force Tamil Voice Selection
+                const utterance = new SpeechSynthesisUtterance(currentSet[index].t);
                 const voices = synth.getVoices();
-                const tamilVoice = voices.find(v => v.lang.includes('ta') || v.name.toLowerCase().includes('tamil'));
-                
-                if (tamilVoice) utterance.voice = tamilVoice;
+                const tamilVoice = voices.find(v => v.lang.includes('ta'));
+                if(tamilVoice) utterance.voice = tamilVoice;
                 utterance.lang = 'ta-IN';
-                utterance.rate = 1.0; // Normal Speed
-
                 utterance.onstart = () => {
-                    document.getElementById('btn-icon').innerText = "⏸️";
-                    document.getElementById('btn-text').innerText = "Pause";
+                    document.getElementById('p-icon').innerText = "⏸";
+                    document.getElementById('p-label').innerText = "PAUSE";
                 };
-
-                utterance.onend = resetSpeechButton;
-                utterance.onerror = resetSpeechButton;
-                
+                utterance.onend = resetBtn;
                 synth.speak(utterance);
             }
         }
 
-        function resetSpeechButton() {
-            document.getElementById('btn-icon').innerText = "▶️";
-            document.getElementById('btn-text').innerText = "Play Tamil";
+        function resetBtn() {
+            document.getElementById('p-icon').innerText = "▶";
+            document.getElementById('p-label').innerText = "LISTEN";
         }
 
         function nextWord() {
-            if (currentIndex < currentCategory.length - 1) {
-                currentIndex++;
-                updateTamilCard();
+            if(index < currentSet.length - 1) {
+                index++;
+                updateCard();
             } else {
-                alert("Super! You finished all words! 🌟");
-                showScreen('tamil-category-screen');
+                document.getElementById('celebration').style.display = 'flex';
             }
         }
-
-        // Initialize voices for mobile browsers
-        window.speechSynthesis.getVoices();
     </script>
 </body>
 </html>
