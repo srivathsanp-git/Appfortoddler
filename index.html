@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Tamil Toddler Pro</title>
+    <title>Tamil Toddler Pro | Smart Guard</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
 
@@ -43,24 +43,14 @@
             flex-direction: column;
         }
 
-        /* Screens */
-        .screen {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            padding: 20px;
-        }
+        .screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; padding: 20px; }
         .active { display: flex; }
 
-        /* Progress Section */
         .progress-header { width: 100%; max-width: 450px; margin-bottom: 15px; }
         .progress-meta { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.9rem; color: #8E8E93; margin-bottom: 5px; }
         .progress-outer { height: 8px; background: #E5E5EA; border-radius: 4px; overflow: hidden; }
         .progress-inner { height: 100%; background: var(--apple-blue); width: 0%; transition: width 0.4s ease; }
 
-        /* Card System */
         .main-card {
             background: white;
             width: 100%;
@@ -74,8 +64,11 @@
             margin-bottom: 100px;
         }
 
-        .img-container { width: 100%; height: 55%; background: #eee; }
-        .main-img { width: 100%; height: 100%; object-fit: cover; }
+        .img-container { width: 100%; height: 55%; background: #E5E5EA; position: relative; }
+        .main-img { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.3s; }
+        
+        /* Loading Spinner */
+        .loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #8E8E93; font-size: 0.8rem; }
 
         .content { padding: 20px; text-align: center; flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
         .tam-txt { font-size: 2.8rem; font-weight: 900; margin: 10px 0; }
@@ -85,42 +78,20 @@
             color: white;
             padding: 18px;
             border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            font-size: 1.2rem; font-weight: 800; cursor: pointer;
         }
 
         .next-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--nike-black);
-            color: white;
-            padding: 20px;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: 800;
-            width: 90%;
-            max-width: 400px;
-            border: none;
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--nike-black); color: white; padding: 20px;
+            border-radius: 50px; font-size: 1.2rem; font-weight: 800;
+            width: 90%; max-width: 400px; border: none;
         }
 
-        /* Celebration Centering */
         #celebration {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: white;
-            z-index: 1000;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            display: none; position: fixed; inset: 0; background: white; z-index: 1000;
+            flex-direction: column; justify-content: center; align-items: center; text-align: center;
         }
 
         .cat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; width: 100%; max-width: 500px; }
@@ -135,7 +106,7 @@
     </div>
 
     <div id="home-screen" class="screen active">
-        <h1 style="margin-top:40px">Tamil Learning</h1>
+        <h1 style="margin-top:40px; font-weight: 900;">LEARN TAMIL</h1>
         <div class="cat-grid">
             <div class="cat-btn" onclick="start('fruits')">🍎<br>Fruits</div>
             <div class="cat-btn" onclick="start('animals')">🦁<br>Animals</div>
@@ -147,14 +118,17 @@
     <div id="app-screen" class="screen">
         <div class="progress-header">
             <div class="progress-meta">
-                <span onclick="openGate()">🏠 Home</span>
+                <span onclick="openGate()" style="cursor:pointer">🏠 Home</span>
                 <span id="prog-label">Step 1 of 10</span>
             </div>
             <div class="progress-outer"><div id="prog-bar" class="progress-inner"></div></div>
         </div>
 
         <div class="main-card">
-            <div class="img-container"><img id="m-img" class="main-img"></div>
+            <div class="img-container">
+                <div class="loader">Loading...</div>
+                <img id="m-img" class="main-img" onerror="handleImageError(this)">
+            </div>
             <div class="content">
                 <div id="m-eng" style="color:#8E8E93; font-weight:700; letter-spacing:1px">APPLE</div>
                 <div id="m-tam" class="tam-txt">ஆப்பிள்</div>
@@ -169,7 +143,6 @@
     <div id="celebration">
         <span style="font-size: 5rem;">🏆</span>
         <h1 style="font-size: 3rem; margin: 10px 0;">Great Job!</h1>
-        <p style="font-size: 1.2rem; margin-bottom: 30px;">You finished the lesson.</p>
         <button class="next-btn" style="position:static" onclick="location.reload()">PLAY AGAIN</button>
     </div>
 
@@ -177,56 +150,67 @@
         const synth = window.speechSynthesis;
         const db = {
             fruits: [
-                {e:"Apple", t:"ஆப்பிள்", i:"https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=600"},
-                {e:"Mango", t:"மாம்பழம்", i:"https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=600"},
-                {e:"Banana", t:"வாழைப்பழம்", i:"https://images.unsplash.com/photo-1571771894821-ad990241274d?w=600"},
-                {e:"Grapes", t:"திராட்சை", i:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600"},
-                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600"},
-                {e:"Pineapple", t:"அன்னாசி", i:"https://images.unsplash.com/photo-1550258114-68bd299738ad?w=600"},
-                {e:"Watermelon", t:"தர்பூசணி", i:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600"},
-                {e:"Papaya", t:"பப்பாளி", i:"https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=600"},
-                {e:"Pomegranate", t:"மாதுளை", i:"https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=600"},
-                {e:"Guava", t:"கொய்யா", i:"https://images.unsplash.com/photo-1536511132770-e51086659795?w=600"}
+                {e:"Apple", t:"ஆப்பிள்", i:"https://images.unsplash.com/photo-1560806887-1e4cd0b6bccb?w=600", alt:"https://images.pexels.com/photos/102104/pexels-photo-102104.jpeg?auto=compress&cs=tinysrgb&w=600"},
+                {e:"Mango", t:"மாம்பழம்", i:"https://images.unsplash.com/photo-1591073113125-e46713c829ed?w=600", alt:"https://cdn.pixabay.com/photo/2016/03/05/22/18/food-1239241_1280.jpg"},
+                {e:"Banana", t:"வாழைப்பழம்", i:"https://images.unsplash.com/photo-1571771894821-ad990241274d?w=600", alt:"https://images.pexels.com/photos/2870882/pexels-photo-2870882.jpeg?w=600"},
+                {e:"Grapes", t:"திராட்சை", i:"https://images.unsplash.com/photo-1537640538966-79f369143f8f?w=600", alt:"https://images.pexels.com/photos/60021/grapes-wine-fruit-glass-60021.jpeg?w=600"},
+                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=600", alt:"https://images.pexels.com/photos/161559/orange-fruit-vitamins-healthy-eating-161559.jpeg?w=600"},
+                {e:"Pineapple", t:"அன்னாசி", i:"https://images.unsplash.com/photo-1550258114-68bd299738ad?w=600", alt:"https://images.pexels.com/photos/947885/pexels-photo-947885.jpeg?w=600"},
+                {e:"Watermelon", t:"தர்பூசணி", i:"https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=600", alt:"https://images.pexels.com/photos/1313267/pexels-photo-1313267.jpeg?w=600"},
+                {e:"Papaya", t:"பப்பாளி", i:"https://images.unsplash.com/photo-1526318896980-cf78c088247c?w=600", alt:"https://images.pexels.com/photos/5945848/pexels-photo-5945848.jpeg?w=600"},
+                {e:"Pomegranate", t:"மாதுளை", i:"https://images.unsplash.com/photo-1615484477778-ca3b77940c25?w=600", alt:"https://images.pexels.com/photos/6525191/pexels-photo-6525191.jpeg?w=600"},
+                {e:"Guava", t:"கொய்யா", i:"https://images.unsplash.com/photo-1536511132770-e51086659795?w=600", alt:"https://images.pexels.com/photos/14023758/pexels-photo-14023758.jpeg?w=600"}
             ],
             animals: [
-                {e:"Lion", t:"சிங்கம்", i:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600"},
-                {e:"Elephant", t:"யானை", i:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600"},
-                {e:"Tiger", t:"புலி", i:"https://images.unsplash.com/photo-1508817628294-5a453fa0b8fb?w=600"},
-                {e:"Cow", t:"பசு", i:"https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=600"},
-                {e:"Dog", t:"நாய்", i:"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600"},
-                {e:"Cat", t:"பூனை", i:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600"},
-                {e:"Horse", t:"குதிரை", i:"https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600"},
-                {e:"Monkey", t:"குரங்கு", i:"https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=600"},
-                {e:"Rabbit", t:"முயல்", i:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600"},
-                {e:"Deer", t:"மான்", i:"https://images.unsplash.com/photo-1484406566174-9da000fd267c?w=600"}
+                {e:"Lion", t:"சிங்கம்", i:"https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=600", alt:"https://images.pexels.com/photos/33045/lion-wild-africa-african.jpg?w=600"},
+                {e:"Elephant", t:"யானை", i:"https://images.unsplash.com/photo-1557050543-4d5f4e07ef46?w=600", alt:"https://images.pexels.com/photos/66898/elephant-cub-tsavo-kenya-66898.jpeg?w=600"},
+                {e:"Tiger", t:"புலி", i:"https://images.unsplash.com/photo-1508817628294-5a453fa0b8fb?w=600", alt:"https://images.pexels.com/photos/41315/tiger-wildlife-animal-cat-41315.jpeg?w=600"},
+                {e:"Cow", t:"பசு", i:"https://images.unsplash.com/photo-1546445317-29f4545e9d53?w=600", alt:"https://images.pexels.com/photos/235731/pexels-photo-235731.jpeg?w=600"},
+                {e:"Dog", t:"நாய்", i:"https://images.unsplash.com/photo-1517849845537-4d257902454a?w=600", alt:"https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?w=600"},
+                {e:"Cat", t:"பூனை", i:"https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600", alt:"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?w=600"},
+                {e:"Horse", t:"குதிரை", i:"https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?w=600", alt:"https://images.pexels.com/photos/52500/horse-herd-fog-nature-52500.jpeg?w=600"},
+                {e:"Monkey", t:"குரங்கு", i:"https://images.unsplash.com/photo-1540573133985-87b6da6d54a9?w=600", alt:"https://images.pexels.com/photos/1138460/pexels-photo-1138460.jpeg?w=600"},
+                {e:"Rabbit", t:"முயல்", i:"https://images.unsplash.com/photo-1585110396000-c9ffd4e4b308?w=600", alt:"https://images.pexels.com/photos/372166/pexels-photo-372166.jpeg?w=600"},
+                {e:"Deer", t:"மான்", i:"https://images.unsplash.com/photo-1484406566174-9da000fd267c?w=600", alt:"https://images.pexels.com/photos/162203/panthera-tigris-altaica-tiger-siberian-tiger-amur-tiger-162203.jpeg?w=600"}
             ],
             colors: [
-                {e:"Red", t:"சிவப்பு", i:"https://images.unsplash.com/photo-1536924430914-8c613d6df555?w=600"},
-                {e:"Blue", t:"நீலம்", i:"https://images.unsplash.com/photo-1502691876148-a84978e59af8?w=600"},
-                {e:"Green", t:"பச்சை", i:"https://images.unsplash.com/photo-1535451801241-b5395e1d4a1b?w=600"},
-                {e:"Yellow", t:"மஞ்சள்", i:"https://images.unsplash.com/photo-1564344756631-417321f7c9d7?w=600"},
-                {e:"White", t:"வெள்ளை", i:"https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=600"},
-                {e:"Black", t:"கருப்பு", i:"https://images.unsplash.com/photo-1531259313203-90d297926955?w=600"},
-                {e:"Pink", t:"இளம் சிவப்பு", i:"https://images.unsplash.com/photo-1533038590840-1cde6e668a91?w=600"},
-                {e:"Purple", t:"ஊதா", i:"https://images.unsplash.com/photo-1504192010706-ddd7f5ad97d7?w=600"},
-                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1557800636-894a64c1696f?w=600"},
-                {e:"Brown", t:"பழுப்பு", i:"https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600"}
+                {e:"Red", t:"சிவப்பு", i:"https://images.unsplash.com/photo-1580136607993-fd59820cc14a?w=600", alt:"https://images.pexels.com/photos/158063/pexels-photo-158063.jpeg?w=600"},
+                {e:"Blue", t:"நீலம்", i:"https://images.unsplash.com/photo-1502691876148-a84978e59af8?w=600", alt:"https://images.pexels.com/photos/312022/pexels-photo-312022.jpeg?w=600"},
+                {e:"Green", t:"பச்சை", i:"https://images.unsplash.com/photo-1535451801241-b5395e1d4a1b?w=600", alt:"https://images.pexels.com/photos/1072824/pexels-photo-1072824.jpeg?w=600"},
+                {e:"Yellow", t:"மஞ்சள்", i:"https://images.unsplash.com/photo-1564344756631-417321f7c9d7?w=600", alt:"https://images.pexels.com/photos/1013444/pexels-photo-1013444.jpeg?w=600"},
+                {e:"White", t:"வெள்ளை", i:"https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=600", alt:"https://images.pexels.com/photos/312433/pexels-photo-312433.jpeg?w=600"},
+                {e:"Black", t:"கருப்பு", i:"https://images.unsplash.com/photo-1531259313203-90d297926955?w=600", alt:"https://images.pexels.com/photos/96627/pexels-photo-96627.jpeg?w=600"},
+                {e:"Pink", t:"இளம் சிவப்பு", i:"https://images.unsplash.com/photo-1533038590840-1cde6e668a91?w=600", alt:"https://images.pexels.com/photos/220067/pexels-photo-220067.jpeg?w=600"},
+                {e:"Purple", t:"ஊதா", i:"https://images.unsplash.com/photo-1504192010706-ddd7f5ad97d7?w=600", alt:"https://images.pexels.com/photos/1410224/pexels-photo-1410224.jpeg?w=600"},
+                {e:"Orange", t:"ஆரஞ்சு", i:"https://images.unsplash.com/photo-1557800636-894a64c1696f?w=600", alt:"https://images.pexels.com/photos/3270223/pexels-photo-3270223.jpeg?w=600"},
+                {e:"Brown", t:"பழுப்பு", i:"https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=600", alt:"https://images.pexels.com/photos/1939485/pexels-photo-1939485.jpeg?w=600"}
             ],
             vehicles: [
-                {e:"Car", t:"கார்", i:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600"},
-                {e:"Bus", t:"பேருந்து", i:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600"},
-                {e:"Train", t:"இரயில்", i:"https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600"},
-                {e:"Aeroplane", t:"விமானம்", i:"https://images.unsplash.com/photo-1436491865332-7a61a109c7d3?w=600"},
-                {e:"Bicycle", t:"மிதிவண்டி", i:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600"},
-                {e:"Ship", t:"கப்பல்", i:"https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?w=600"},
-                {e:"Tractor", t:"டிராக்டர்", i:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600"},
-                {e:"Ambulance", t:"ஆம்புலன்ஸ்", i:"https://images.unsplash.com/photo-1587350859728-117622bc75fb?w=600"},
-                {e:"Helicopter", t:"ஹெலிகாப்டர்", i:"https://images.unsplash.com/photo-1583648711586-51b515f45372?w=600"},
-                {e:"Auto", t:"ஆட்டோ", i:"https://images.unsplash.com/photo-1561113054-d6f7f2b1c8a1?w=600"}
+                {e:"Car", t:"கார்", i:"https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=600", alt:"https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?w=600"},
+                {e:"Bus", t:"பேருந்து", i:"https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=600", alt:"https://images.pexels.com/photos/385997/pexels-photo-385997.jpeg?w=600"},
+                {e:"Train", t:"இரயில்", i:"https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=600", alt:"https://images.pexels.com/photos/72594/japan-train-railway-railroad-72594.jpeg?w=600"},
+                {e:"Aeroplane", t:"விமானம்", i:"https://images.unsplash.com/photo-1436491865332-7a61a109c7d3?w=600", alt:"https://images.pexels.com/photos/46148/aircraft-jet-landing-cloud-46148.jpeg?w=600"},
+                {e:"Bicycle", t:"மிதிவண்டி", i:"https://images.unsplash.com/photo-1485965120184-e220f721d03e?w=600", alt:"https://images.pexels.com/photos/100582/pexels-photo-100582.jpeg?w=600"},
+                {e:"Ship", t:"கப்பல்", i:"https://images.unsplash.com/photo-1444858291040-58f756a3bdd6?w=600", alt:"https://images.pexels.com/photos/813011/pexels-photo-813011.jpeg?w=600"},
+                {e:"Tractor", t:"டிராக்டர்", i:"https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=600", alt:"https://images.pexels.com/photos/2933243/pexels-photo-2933243.jpeg?w=600"},
+                {e:"Ambulance", t:"ஆம்புலன்ஸ்", i:"https://images.unsplash.com/photo-1587350859728-117622bc75fb?w=600", alt:"https://images.pexels.com/photos/263433/pexels-photo-263433.jpeg?w=600"},
+                {e:"Helicopter", t:"ஹெலிகாப்டர்", i:"https://images.unsplash.com/photo-1583648711586-51b515f45372?w=600", alt:"https://images.pexels.com/photos/3639454/pexels-photo-3639454.jpeg?w=600"},
+                {e:"Auto Rickshaw", t:"ஆட்டோ", i:"https://images.unsplash.com/photo-1561113054-d6f7f2b1c8a1?w=600", alt:"https://cdn.pixabay.com/photo/2015/06/18/12/35/tuktuk-813636_1280.jpg"}
             ]
         };
 
         let set = [], idx = 0;
+
+        function handleImageError(imgElement) {
+            const currentItem = set[idx];
+            // If primary failed, try secondary 'alt' source
+            if (imgElement.src !== currentItem.alt) {
+                imgElement.src = currentItem.alt;
+            } else {
+                // If secondary also failed, create a premium placeholder
+                imgElement.src = `https://ui-avatars.com/api/?name=${currentItem.e}&background=random&size=512&color=fff&font-size=0.5`;
+            }
+        }
 
         function start(c) {
             set = db[c]; idx = 0;
@@ -237,11 +221,14 @@
 
         function update() {
             const item = set[idx];
-            document.getElementById('m-img').src = item.i;
+            const img = document.getElementById('m-img');
+            img.style.opacity = 0;
+            img.src = item.i;
+            img.onload = () => img.style.opacity = 1;
+            
             document.getElementById('m-eng').innerText = item.e.toUpperCase();
             document.getElementById('m-tam').innerText = item.t;
             
-            // Progress Update
             const p = ((idx + 1) / set.length) * 100;
             document.getElementById('prog-bar').style.width = p + '%';
             document.getElementById('prog-label').innerText = `Step ${idx + 1} of ${set.length}`;
